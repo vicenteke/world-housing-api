@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-03-22T17:56:44.033Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="RO684ajo4rr9NvY0EQ-L" version="24.0.7" type="device">
+<mxfile host="app.diagrams.net" modified="2024-03-22T18:24:27.565Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="F4S0W5I55jFVQJ0sMH3F" version="24.0.7" type="device">
   <diagram name="Page-1" id="OrtiCgSYBfdPpfkaP5lF">
-    <mxGraphModel dx="346" dy="180" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="925" dy="483" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -104,17 +104,19 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="7WSqbNIsx2HVRGoTnnqX-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;" edge="1" parent="1" source="7WSqbNIsx2HVRGoTnnqX-50" target="7WSqbNIsx2HVRGoTnnqX-3">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="7WSqbNIsx2HVRGoTnnqX-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;" edge="1" parent="1" source="7WSqbNIsx2HVRGoTnnqX-50">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="499" y="490" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="7WSqbNIsx2HVRGoTnnqX-50" value="name" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="400" y="492.5" width="60" height="30" as="geometry" />
+          <mxGeometry x="400" y="474.75" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="7WSqbNIsx2HVRGoTnnqX-53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;" edge="1" parent="1" source="7WSqbNIsx2HVRGoTnnqX-51" target="7WSqbNIsx2HVRGoTnnqX-3">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7WSqbNIsx2HVRGoTnnqX-51" value="id" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="400" y="457.5" width="60" height="30" as="geometry" />
+          <mxGeometry x="400" y="439.75" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="7WSqbNIsx2HVRGoTnnqX-54" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;strokeWidth=3;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="7WSqbNIsx2HVRGoTnnqX-4">
           <mxGeometry relative="1" as="geometry">
@@ -135,6 +137,12 @@
         </mxCell>
         <mxCell id="7WSqbNIsx2HVRGoTnnqX-60" value="Each request should first check for existing entries on this table. If none is found, populate accordingly and return the result" style="shape=note;size=10;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=8;labelBackgroundColor=none;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="340" y="220" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7WSqbNIsx2HVRGoTnnqX-63" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;" edge="1" parent="1" source="7WSqbNIsx2HVRGoTnnqX-61" target="7WSqbNIsx2HVRGoTnnqX-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7WSqbNIsx2HVRGoTnnqX-61" value="base_uri" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="400" y="510.25" width="60" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
