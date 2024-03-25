@@ -19,20 +19,12 @@ class CountryStateView(ListAPIView):
     serializer_class = CountryStateSerializer
 
     def list(self, request, *args, **kwargs):
-        # get country states
+        # get country states and set self.queryset
         country_name = kwargs.get('country')
         if not country_name:
             return Response('Country not provided', HTTP_400_BAD_REQUEST)
         country = get_object_or_404(Country, base_uri=country_name)
-        country_states = country.states.all()
+        self.queryset = country.states.all()
 
         # proceed with behaviour from ListAPIView
-        queryset = self.filter_queryset(country_states)
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return super().list(request, *args, **kwargs)
