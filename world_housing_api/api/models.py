@@ -28,7 +28,7 @@ class CountryState(models.Model):
     """States supported by the API"""
     name = models.CharField(max_length=100)
     abbreviation = models.CharField(max_length=10)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, related_name='states', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.name} /{self.country.name}/{self.abbreviation}'

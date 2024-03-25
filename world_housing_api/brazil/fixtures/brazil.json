@@ -1,0 +1,253 @@
+[
+  {
+    "model": "api.country",
+    "pk": 55,
+    "fields": {
+      "name": "Brazil",
+      "base_uri": "brazil"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5501,
+    "fields": {
+      "country_id": 55,
+      "name": "Acre",
+      "abbreviation": "ac"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5502,
+    "fields": {
+      "country_id": 55,
+      "name": "Alagoas",
+      "abbreviation": "al"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5503,
+    "fields": {
+      "country_id": 55,
+      "name": "Amapá",
+      "abbreviation": "ap"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5504,
+    "fields": {
+      "country_id": 55,
+      "name": "Amazonas",
+      "abbreviation": "am"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5505,
+    "fields": {
+      "country_id": 55,
+      "name": "Bahia",
+      "abbreviation": "ba"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5506,
+    "fields": {
+      "country_id": 55,
+      "name": "Ceará",
+      "abbreviation": "ce"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5507,
+    "fields": {
+      "country_id": 55,
+      "name": "Espírito Santo",
+      "abbreviation": "es"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5508,
+    "fields": {
+      "country_id": 55,
+      "name": "Goiás",
+      "abbreviation": "go"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5509,
+    "fields": {
+      "country_id": 55,
+      "name": "Maranhão",
+      "abbreviation": "ma"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5510,
+    "fields": {
+      "country_id": 55,
+      "name": "Mato Grosso",
+      "abbreviation": "mt"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5511,
+    "fields": {
+      "country_id": 55,
+      "name": "Mato Grosso do Sul",
+      "abbreviation": "ms"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5512,
+    "fields": {
+      "country_id": 55,
+      "name": "Minas Gerais",
+      "abbreviation": "mg"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5513,
+    "fields": {
+      "country_id": 55,
+      "name": "Pará",
+      "abbreviation": "pa"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5514,
+    "fields": {
+      "country_id": 55,
+      "name": "Paraíba",
+      "abbreviation": "pb"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5515,
+    "fields": {
+      "country_id": 55,
+      "name": "Paraná",
+      "abbreviation": "pr"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5516,
+    "fields": {
+      "country_id": 55,
+      "name": "Pernambuco",
+      "abbreviation": "pe"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5517,
+    "fields": {
+      "country_id": 55,
+      "name": "Piauí",
+      "abbreviation": "pi"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5518,
+    "fields": {
+      "country_id": 55,
+      "name": "Rio de Janeiro",
+      "abbreviation": "rj"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5519,
+    "fields": {
+      "country_id": 55,
+      "name": "Rio Grande do Norte",
+      "abbreviation": "rn"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5520,
+    "fields": {
+      "country_id": 55,
+      "name": "Rio Grande do Sul",
+      "abbreviation": "rs"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5521,
+    "fields": {
+      "country_id": 55,
+      "name": "Rondônia",
+      "abbreviation": "ro"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5522,
+    "fields": {
+      "country_id": 55,
+      "name": "Roraima",
+      "abbreviation": "rr"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5523,
+    "fields": {
+      "country_id": 55,
+      "name": "Santa Catarina",
+      "abbreviation": "sc"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5524,
+    "fields": {
+      "country_id": 55,
+      "name": "São Paulo",
+      "abbreviation": "sp"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5525,
+    "fields": {
+      "country_id": 55,
+      "name": "Sergipe",
+      "abbreviation": "se"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5526,
+    "fields": {
+      "country_id": 55,
+      "name": "Tocantins",
+      "abbreviation": "to"
+    }
+  },
+  {
+    "model": "api.countrystate",
+    "pk": 5527,
+    "fields": {
+      "country_id": 55,
+      "name": "Distrito Federal",
+      "abbreviation": "df"
+    }
+  }
+]
