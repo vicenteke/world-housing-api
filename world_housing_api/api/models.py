@@ -57,7 +57,7 @@ class HousingData(models.Model):
     state = models.ForeignKey(CountryState, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'{self.month}/{self.year} /{self.country.name}{"/" + self.state.abbreviation if self.state else ""} {self.square_meter_price} {self.variation}'
+        return f'{"{:02d}".format(self.month)}/{self.year} /{self.country.name}{"/" + self.state.abbreviation if self.state else ""} {self.square_meter_price} {self.variation}'
     
     class Meta:
         ordering = ['country', '-year', '-month']
