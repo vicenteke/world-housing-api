@@ -3,8 +3,14 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
-from .models import Country, CountryState
-from .serializers import CountrySerializer, CountryStateSerializer
+from .models import (
+    Country,
+    CountryState
+)
+from .serializers import (
+    CountrySerializer,
+    CountryStateSerializer
+)
 
 
 class CountryView(ListAPIView):

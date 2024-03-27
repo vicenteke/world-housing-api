@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from api.generics import RetrieveHousingDataAPIView
+from .mixins import BrazilHousingDataMixin
 
-# Create your views here.
+
+class RetrieveBrazilHousingData(BrazilHousingDataMixin,
+                                RetrieveHousingDataAPIView):
+    pass
