@@ -1,7 +1,8 @@
 import requests
+from api.mixins import HousingDataMixin
 
 
-class BrazilHousingDataMixin:
+class BrazilHousingDataMixin(HousingDataMixin):
     """Implements get_housing_data_from_remote() for Brazil"""
     COUNTRY = 'brazil'
     STATES_IBGE_FACTORY = {
@@ -60,7 +61,7 @@ class BrazilHousingDataMixin:
         https://servicodados.ibge.gov.br/api/docs/agregados?versao=3#api-acervo
         """
         url = 'https://servicodados.ibge.gov.br/api/v3/agregados/2296/periodos/[PERIODS]/variaveis/48|1196?localidades=[LEVEL][[STATES]]'
-        requested_entries = self.get_requested_entries(
+        requested_entries = HousingDataMixin.get_requested_entries(
             year=year, month=month, final_year=final_year,
             final_month=final_month, states=states)
 
@@ -71,7 +72,10 @@ class BrazilHousingDataMixin:
         url = url.replace('[PERIODS]', '|'.join(periods))
 
         if states:
-            url_states = [self.STATES_IBGE_FACTORY[state.lower()] for state in states]
+            url_states = [
+                self.STATES_IBGE_FACTORY[state.lower()]
+                for state in states
+            ]
             url = url.replace('[LEVEL]', self.LEVELS_IBGE_FACTORY['state'])
             url = url.replace('[STATES]', '|'.join(url_states))
         else:
@@ -99,10 +103,13 @@ class BrazilHousingDataMixin:
                         float(value)
                     except Exception as e:
                         raise Exception(
-                            'Failed to retrieve Brazilian data from IBGE API: invalid data')
+                            'Failed to retrieve Brazilian data from IBGE API: '
+                            'invalid data'
+                        )
                     if date not in data[result['localidade']['id']]:
                         data[result['localidade']['id']][date] = {}
-                    data[result['localidade']['id']][date][stat_field] = float(value)
+                    data[result['localidade']['id']][date][stat_field]\
+                        = float(value)
 
         res = []
         for location in data:
@@ -110,7 +117,12 @@ class BrazilHousingDataMixin:
                 res.append({
                     "year": int(date[:4]),
                     "month": int(date[-2:]),
-                    "square_meter_price": values['square_meter_price'],
+                    "square_meter_price": self.convert_to_dolar_on_month(
+                        currency='brl',
+                        value=values['square_meter_price'],
+                        year=int(date[:4]),
+                        month=int(date[-2:])
+                    ),
                     "variation": values['variation'] / 100,
                     "state": None if not states
                     else self.get_state_from_id(int(location))

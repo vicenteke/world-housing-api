@@ -1,5 +1,5 @@
 # world-housing-api
-*world-housing-api* is a Django REST Framework (DRF) intended to serve data concerning housing prices and monthly variations from several countries in the same place.
+*world-housing-api* is a Django REST Framework (DRF) project intended to serve data concerning housing prices and monthly variations from several countries in the same place.
 
 You can check the auto-generated docs or some documentation under the `docs/` folder.
 

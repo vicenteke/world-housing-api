@@ -1,7 +1,15 @@
+from datetime import (
+    datetime,
+    timedelta
+)
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Country, HousingData
+from .models import (
+    Country,
+    HousingData
+)
+from .utils import convert_to_dolar
 
 
 class HousingDataMixin:
@@ -63,8 +71,8 @@ class HousingDataMixin:
             .filter(date_range_filter).filter(states_filter)\
             .order_by('state', 'year', 'month')
 
+    @staticmethod
     def get_requested_entries(
-            self,
             year: int,
             month: int,
             final_year: int = None,
@@ -98,6 +106,28 @@ class HousingDataMixin:
 
         return requested_entries
 
+    @staticmethod
+    def convert_to_dolar_on_month(
+            currency: str,
+            value: float | int,
+            year: int, month: int):
+        """Takes a year-month pair and passes a date to
+        utils.convert_to_dolar().
+        """
+        today = datetime.today()
+        if month == 12:
+            month = 0
+            year += 1
+
+        # use last day of month
+        currency_date = datetime(
+            year=year, month=month + 1, day=1) - timedelta(days=1)
+
+        if currency_date > today:
+            currency_date = today
+
+        return convert_to_dolar(currency, value, currency_date)
+
     def get_housing_data(
             self,
             year: int,
@@ -128,7 +158,7 @@ class HousingDataMixin:
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        requested_entries = self.get_requested_entries(
+        requested_entries = HousingDataMixin.get_requested_entries(
             year=year, month=month, final_year=final_year,
             final_month=final_month, states=states)
 
