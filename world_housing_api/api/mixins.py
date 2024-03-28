@@ -44,6 +44,28 @@ class HousingDataMixin:
             "get_housing_data_from_remote() must be implemented"
         )
 
+
+    def retrieve(self, request, *args, is_range: bool = False, **kwargs):
+        instances = self.get_housing_data(
+            year=kwargs.get('year'),
+            month=kwargs.get('month'),
+            final_year=kwargs.get('final_year'),
+            final_month=kwargs.get('final_month'),
+            states=kwargs.get('states'),
+        )
+        if isinstance(instances, Response):
+            return instances
+        if not instances:
+            return Response(
+                'Housing data not found',
+                status.HTTP_404_NOT_FOUND
+            )
+        if not is_range:
+            instances = instances[0]
+        serializer = self.get_serializer(instances)
+        return Response(serializer.data)
+
+
     def get_housing_data_from_db(
             self,
             year: int,

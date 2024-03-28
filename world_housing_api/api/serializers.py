@@ -1,11 +1,25 @@
-from rest_framework.serializers import ModelSerializer
-from .models import Country, CountryState, HousingData
+from rest_framework.serializers import (
+    ModelSerializer,
+    Serializer,
+    SerializerMethodField
+)
+from .models import (
+    Country,
+    CountryState,
+    HousingData
+)
 
 
 class HousingDataStatsSerializer(ModelSerializer):
     class Meta:
         model = HousingData
         fields = ['square_meter_price', 'variation']
+
+
+class HousingDataStatsDateSerializer(ModelSerializer):
+    class Meta:
+        model = HousingData
+        fields = ['square_meter_price', 'variation', 'year', 'month']
 
 
 class CountryStateSerializer(ModelSerializer):
@@ -19,3 +33,19 @@ class CountrySerializer(ModelSerializer):
     class Meta:
         model = Country
         fields = ['name', 'base_uri', 'states']
+
+
+class HousingDataRangeSerializer(Serializer):
+    variation = SerializerMethodField()
+    monthly = SerializerMethodField()
+
+    def get_variation(self, obj):
+        res = 1.0
+        for housing_data in obj:
+            res *= 1 + float(housing_data.variation)
+        return res - 1
+
+    def get_monthly(self, obj):
+        return [
+            HousingDataStatsDateSerializer(entry).data for entry in obj
+        ]

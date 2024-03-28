@@ -6,7 +6,7 @@ from .views import (
 
 
 urlpatterns = [
-    path('brazil', include('brazil.urls')),
+    path('brazil/', include('brazil.urls')),
     path('countries', CountryView.as_view()),
     path('<str:country>/states', CountryStateView.as_view()),
 ]
