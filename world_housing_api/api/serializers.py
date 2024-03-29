@@ -10,13 +10,13 @@ from .models import (
 )
 
 
-class HousingDataStatsSerializer(ModelSerializer):
+class HousingDataValuesSerializer(ModelSerializer):
     class Meta:
         model = HousingData
         fields = ['square_meter_price', 'variation']
 
 
-class HousingDataStatsDateSerializer(ModelSerializer):
+class HousingDataValuesDateSerializer(ModelSerializer):
     class Meta:
         model = HousingData
         fields = ['square_meter_price', 'variation', 'year', 'month']
@@ -47,5 +47,16 @@ class HousingDataRangeSerializer(Serializer):
 
     def get_monthly(self, obj):
         return [
-            HousingDataStatsDateSerializer(entry).data for entry in obj
+            HousingDataValuesDateSerializer(entry).data for entry in obj
         ]
+
+
+class HousingDateStatesSerializer(Serializer):
+    def to_representation(self, obj):
+        res = {}
+        for entry in obj:
+            if entry.state.abbreviation not in res:
+                res[entry.state.abbreviation] = {}
+            res[entry.state.abbreviation][f'{entry.month}/{entry.year}'] =\
+                HousingDataValuesSerializer(entry).data
+        return res

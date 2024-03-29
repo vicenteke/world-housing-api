@@ -1,5 +1,6 @@
 import requests
 from api.mixins import HousingDataMixin
+from api.models import CountryState
 
 
 class BrazilHousingDataMixin(HousingDataMixin):
@@ -73,7 +74,7 @@ class BrazilHousingDataMixin(HousingDataMixin):
 
         if states:
             url_states = [
-                self.STATES_IBGE_FACTORY[state.lower()]
+                str(self.STATES_IBGE_FACTORY[state.lower()])
                 for state in states
             ]
             url = url.replace('[LEVEL]', self.LEVELS_IBGE_FACTORY['state'])
@@ -124,8 +125,10 @@ class BrazilHousingDataMixin(HousingDataMixin):
                         month=int(date[-2:])
                     ),
                     "variation": values['variation'] / 100,
-                    "state": None if not states
-                    else self.get_state_from_id(int(location))
+                    "state_id": None if not states
+                    else self.get_state_id_from_abbreviation(
+                        self.get_state_from_id(int(location))
+                    )
                 })
         return res
 

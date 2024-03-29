@@ -1,6 +1,7 @@
 from api.generics import (
     RetrieveHousingDataAPIView,
-    RetrieveHousingDataRangeAPIView
+    RetrieveHousingDataRangeAPIView,
+    RetrieveHousingDataStatesAPIView,
 )
 from .mixins import BrazilHousingDataMixin
 
@@ -12,4 +13,9 @@ class RetrieveBrazilHousingData(BrazilHousingDataMixin,
 
 class RetrieveBrazilHousingDataRange(BrazilHousingDataMixin,
                                      RetrieveHousingDataRangeAPIView):
+    pass
+
+
+class RetrieveBrazilHousingDataStates(BrazilHousingDataMixin,
+                                      RetrieveHousingDataStatesAPIView):
     pass

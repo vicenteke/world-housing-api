@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from .models import (
     Country,
+    CountryState,
     HousingData
 )
 from .utils import convert_to_dolar
@@ -33,7 +34,7 @@ class HousingDataMixin:
                 "month": int,
                 "square_meter_price": float,
                 "variation": float,
-                "state": string (abbreviation) | null
+                "state_id": CountryState.id | null
             },
             ...
         ]
@@ -46,12 +47,15 @@ class HousingDataMixin:
 
 
     def retrieve(self, request, *args, is_range: bool = False, **kwargs):
+        states = kwargs.get('states')
+        if states is not None:
+            states = states.lower().split('-')
         instances = self.get_housing_data(
             year=kwargs.get('year'),
             month=kwargs.get('month'),
             final_year=kwargs.get('final_year'),
             final_month=kwargs.get('final_month'),
-            states=kwargs.get('states'),
+            states=states,
         )
         if isinstance(instances, Response):
             return instances
@@ -240,3 +244,12 @@ class HousingDataMixin:
             new_entry.save()
 
         return new_db_entries
+
+
+    def get_state_id_from_abbreviation(self, abbreviation: str):
+        """Returns CountryState.id from abbreviation"""
+        entry = CountryState.objects.only('id').filter(
+                country__base_uri=self.COUNTRY,
+                abbreviation=abbreviation
+            ).get()
+        return entry.id
