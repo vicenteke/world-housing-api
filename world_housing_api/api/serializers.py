@@ -16,12 +16,6 @@ class HousingDataValuesSerializer(ModelSerializer):
         fields = ['square_meter_price', 'variation']
 
 
-class HousingDataValuesDateSerializer(ModelSerializer):
-    class Meta:
-        model = HousingData
-        fields = ['square_meter_price', 'variation', 'year', 'month']
-
-
 class CountryStateSerializer(ModelSerializer):
     class Meta:
         model = CountryState
@@ -46,9 +40,11 @@ class HousingDataRangeSerializer(Serializer):
         return res - 1
 
     def get_monthly(self, obj):
-        return [
-            HousingDataValuesDateSerializer(entry).data for entry in obj
-        ]
+        return {
+            f'{"{:02d}".format(entry.month)}/{entry.year}':
+            HousingDataValuesSerializer(entry).data
+            for entry in obj
+        }
 
 
 class HousingDateStatesSerializer(Serializer):

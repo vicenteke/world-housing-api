@@ -28,15 +28,13 @@ GET /housing/<country>/<initial_year>/<initial_month>/<final_year>/<final_month>
 ```
 {
   "variation": float  # total pricing variation, which is the product of all variations except from the initial month (E.g. 0.01 = 1%)
-  "monthly": [
-    {
-      "square_meter_price": float,   # average square meter price in dolars
-      "variation": float,            # pricing variation in relation to past month (E.g. 0.01 = 1%)
-      "year": integer,
-      "month": integer
-    },
-    ...
-  ]
+  "monthly": {
+      "month/year": {
+        "square_meter_price": float,   # average square meter price in dolars
+        "variation": float,            # pricing variation in relation to past month (E.g. 0.01 = 1%)
+      },
+      ...
+    }
 }
 ```
 
@@ -74,15 +72,13 @@ GET /housing/<country>/<state_1_abbreviation>-<state_2_abbreviation>-<state_3_ab
 {
   <state_1_abbreviation>: {
     "variation": float  # total pricing variation, which is the product of all variations except from the initial month (E.g. 0.01 = 1%)
-    "monthly": [
-      {
+    "monthly": {
+      "month/year": {
         "square_meter_price": float,   # average square meter price in dolars
         "variation": float,            # pricing variation in relation to past month (E.g. 0.01 = 1%)
-        "year": integer,
-        "month": integer
       },
       ...
-    ]
+    }
   },
   <state_2_abbreviation>: {
     ...

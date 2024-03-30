@@ -46,7 +46,8 @@ class HousingDataMixin:
         )
 
 
-    def retrieve(self, request, *args, is_range: bool = False, **kwargs):
+    def retrieve(
+            self, request, *args, is_single_entry: bool = False, **kwargs):
         states = kwargs.get('states')
         if states is not None:
             states = states.lower().split('-')
@@ -64,7 +65,7 @@ class HousingDataMixin:
                 'Housing data not found',
                 status.HTTP_404_NOT_FOUND
             )
-        if not is_range:
+        if is_single_entry:
             instances = instances[0]
         serializer = self.get_serializer(instances)
         return Response(serializer.data)
