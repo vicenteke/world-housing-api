@@ -78,14 +78,16 @@ class BrazilHousingDataMixin(HousingDataMixin):
                 for state in states
             ]
             url = url.replace('[LEVEL]', self.LEVELS_IBGE_FACTORY['state'])
-            url = url.replace('[STATES]', '|'.join(url_states))
+            url = url.replace('[STATES]', ','.join(url_states))
         else:
             url = url.replace('[LEVEL]', self.LEVELS_IBGE_FACTORY['national'])
             url = url.replace('[STATES]', self.STATES_IBGE_FACTORY['all'])
 
         response = requests.get(url)
         if response.status_code != 200:
-            raise Exception('Failed to retrieve Brazilian data from IBGE API.')
+            raise Exception(
+                f'Failed to retrieve Brazilian data from IBGE API ({url}).'
+            )
 
         response = response.json()
 

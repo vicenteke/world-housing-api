@@ -235,11 +235,22 @@ class HousingDataMixin:
                 states=states
             )
 
+        country = Country.objects.get(base_uri=self.COUNTRY)
         for entry in entries_from_remote:
-            new_entry = HousingData(
-                country=Country.objects.get(base_uri=self.COUNTRY),
-                **entry
-            )
+            try:
+                new_entry = HousingData.objects.get(
+                    country=country,
+                    year=entry['year'],
+                    month=entry['month'],
+                    state_id=entry.get('state_id')
+                )
+                new_entry.square_meter_price = entry.get('square_meter_price')
+                new_entry.variation = entry.get('variation')
+            except HousingData.DoesNotExist as e:
+                new_entry = HousingData(
+                    country=country,
+                    **entry
+                )
             new_db_entries.append(new_entry)
             new_entry.save()
 
