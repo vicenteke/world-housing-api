@@ -51,20 +51,23 @@ class HousingDataRangeSerializer(Serializer):
         ]
 
 
-class HousingDateMonthlySerializer(Serializer):
-    def to_representation(self, obj):
-        res = {}
-        for entry in obj:
-            if entry.state.abbreviation not in res:
-                res[entry.state.abbreviation] = {}
-            res[entry.state.abbreviation][f'{entry.month}/{entry.year}'] =\
-                HousingDataValuesSerializer(entry).data
-        return res
-
-
 class HousingDateStatesSerializer(Serializer):
     def to_representation(self, obj):
         res = {}
         for entry in obj:
             res[entry.state.abbreviation] = HousingDataValuesSerializer(entry).data
+        return res
+
+
+class HousingDateStatesRangeSerializer(Serializer):
+    def to_representation(self, obj):
+        state_data = {}
+        for entry in obj:
+            if entry.state.abbreviation not in state_data:
+                state_data[entry.state.abbreviation] = []
+            state_data[entry.state.abbreviation].append(entry)
+
+        res = {}
+        for state, state_entries in state_data.items():
+            res[state] = HousingDataRangeSerializer(state_entries).data
         return res
