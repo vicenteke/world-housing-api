@@ -36,7 +36,7 @@ export default function Home() {
 
   useEffect(() => {
     setHousingData(data?.map((item) => {
-      if (filter.states.length > 0)
+      if (filter.states.length > 0 || data.length > 1)
         return {
           ...item,
           name: getStateName(filter.country || '', item.name)

@@ -6,9 +6,10 @@ import {
   Heading,
   Stat,
   StatArrow,
-  StatGroup,
   StatHelpText,
-  Text
+  Text,
+  Wrap,
+  WrapItem
 } from "@chakra-ui/react";
 import { HousingDataType } from "@/types";
 import HousingDataStat from "./HousingDataStat";
@@ -26,21 +27,23 @@ const HousingDataGroup: FC<HousingDataGroupType> = ({
   ...props
 }: HousingDataGroupType) => {
   return <Box {...props}>
-    <Flex>
+    <Flex alignItems='center' justifyContent='flex-start'>
       <Heading>{name}</Heading>
       {variation !== undefined && <>
-        <Stat {...props}>
-          <StatHelpText>
+        <Stat flexGrow={0} ml='1em'>
+          <StatHelpText whiteSpace='nowrap' pt='.7em'>
             <StatArrow type={variation >= 0 ? 'increase' : 'decrease'} />
             {(variation * 100).toFixed(3)}%
           </StatHelpText>
         </Stat>
-        <Text>{month}{finalMonth && ` - ${finalMonth}`}</Text>
+        <Text ml='4em' fontSize='2xl' color='gray.500'>{month}{finalMonth && ` - ${finalMonth}`}</Text>
       </>}
     </Flex>
-    <StatGroup {...props}>
-      {data.map((stat, index) => <HousingDataStat key= {index} {...stat} />)}
-    </StatGroup>
+    <Wrap spacing='70px' mt='1em'>
+      {data.map((stat, index) => <WrapItem key={index}>
+        <HousingDataStat {...stat} />
+      </WrapItem>)}
+    </Wrap>
   </Box>;
 }
 

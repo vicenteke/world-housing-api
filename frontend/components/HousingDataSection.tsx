@@ -21,17 +21,21 @@ const HousingDataSection: FC<HousingDataSectionType> = ({
   isLoading,
   ...props
 }: HousingDataSectionType) => {
-  return <Stack alignItems='center' w='100%' pt='2em' pb='50px' {...props}>
+  return <Stack w='100%' pt='4em' pb='50px' px='5em' {...props}>
     {housingData === null &&
-      <Text>
+      <Text textAlign='center'>
         Use the form above fetch the housing data. The results will be displayed here.
       </Text>
     }
     {housingData && <>
       {housingData.length > 0
-        ? housingData.map(
-          (group, index) => <HousingDataGroup key={index} {...group} />)
-        : isLoading ? <Stack>
+        ? housingData.map((group, index) => <HousingDataGroup
+              key={index}
+              mb='2em'
+              {...group}
+          />
+        )
+        : isLoading ? <Stack justifyContent='center'>
             <Text>Fetching housing data...</Text>
             <CircularProgress isIndeterminate color='#A75235' />
           </Stack>

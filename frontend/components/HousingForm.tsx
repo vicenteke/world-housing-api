@@ -77,8 +77,10 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
         </GridItem>
         <GridItem area='buttons' mt='1em'>
           <ButtonGroup w='100%' justifyContent='stretch'>
-            <Button w='100%'>Cancel</Button>
-            <Button bg='orange.400' w='100%' onClick={onSubmit}>Submit</Button>
+            <Button w='100%'>Clear</Button>
+            <Button _hover={{
+              background: 'orange.300',
+            }} bg='orange.400' w='100%' onClick={onSubmit}>Submit</Button>
           </ButtonGroup>
         </GridItem>
       </Grid>
