@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -15,11 +15,14 @@ import {
   Input,
   Select,
 } from "@chakra-ui/react";
+import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import { useHousingForm } from "@/hooks/useHousingForm";
 import { useHousingConstants } from "@/hooks/useHousingConstants";
 
 
 const HousingForm: FC<CardProps> = (props: CardProps) => {
+  const [statesOptions, setStatesOptions] = useState<{label: string, value: string}[]>([]);
+
   const {
     fetchData,
     loading,
@@ -35,8 +38,6 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
     loading: loadingConstants,
     data: constants,
     fetchData: fetchConstants,
-    getCountryName,
-    getStateName,
   } = useHousingConstants();
 
   const isLoading = loadingConstants || loading;
@@ -46,13 +47,24 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
       fetchConstants();
   }, []);
 
+  useEffect(() => {
+    if (!constants && !filter.country)
+      setStatesOptions([]);
+    else
+      setStatesOptions(
+        constants?.find(
+          (country) => country.baseUri === filter.country
+        )?.states?.map((state) => ({
+          label: state.name,
+          value: state.abbreviation
+        })) || []
+      );
+  }, [filter.country || '', constants]);
+
   function onSubmit() {
-    fetchData({
-      country: 'brazil',
-      states: ['sc-rj'],
-      initialMonth: '2023-12',
-      finalMonth: '2024-02',
-    })
+    fetchData();
+    window.scrollBy(0, window.innerHeight);
+    // window.scrollTo({top: window.innerHeight, behavior: 'smooth'});
   }
 
   return <Card {...props}>
@@ -64,12 +76,12 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
                         "buttons buttons"`}
         gap='2'
       >
-        <GridItem area={'country'}>
+        <GridItem area='country'>
           <FormControl isDisabled={isLoading}>
             <FormLabel>Country</FormLabel>
-            <Select placeholder='Select a country...'
+            <Select placeholder='Select a country'
               onChange={(e) => setCountry(e.target.value)}
-              value={filter.country || undefined}
+              value={filter.country || ''}
             >
               {
                 constants?.map((country, index) =>
@@ -82,24 +94,54 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
             {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
           </FormControl>
         </GridItem>
-        <GridItem area={'states'}>
-          <FormControl isDisabled={isLoading}>
-            <FormLabel>State(s)</FormLabel>
-            <Select>Select the states...</Select>
+        <GridItem area='states'>
+          <FormControl isDisabled={isLoading} mb='-40px'>
+            <FormLabel mb='-13px'>State(s)</FormLabel>
+            <CUIAutoComplete
+              disableCreateItem
+              placeholder="Specify one or more states"
+              items={statesOptions}
+              selectedItems={
+                statesOptions.filter(
+                  (state) => filter.states?.includes(state.value)
+                ) || []
+              }
+              onSelectedItemsChange={(changes) => {
+                if (changes.selectedItems)
+                  setStates(changes.selectedItems?.map((item) => item.value) || [])
+              }}
+              listStyleProps={{
+                position: 'absolute',
+                zIndex: '20',
+                maxH: '250px',
+                overflowY: 'auto',
+                width: '100%',
+              }}
+            />
             {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
           </FormControl>
         </GridItem>
         <GridItem area='initial'>
           <FormControl isDisabled={isLoading}>
             <FormLabel>From</FormLabel>
-            <Input type='month' placeholder='Select an (initial) month' onChange={(e) => setInitialMonth(e.target.value)} value={filter.initialMonth || undefined} />
+            <Input
+              type='month'
+              placeholder='Select an (initial) month'
+              onChange={(e) => setInitialMonth(e.target.value)}
+              value={filter.initialMonth || ''}
+            />
             {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
           </FormControl>
         </GridItem>
         <GridItem area='final'>
           <FormControl isDisabled={isLoading || !filter.initialMonth}>
             <FormLabel>To</FormLabel>
-            <Input type='month' placeholder='Select a (final) month' onChange={(e) => setFinalMonth(e.target.value)} value={filter.finalMonth || undefined} />
+            <Input
+              type='month'
+              placeholder='Select a (final) month'
+              onChange={(e) => setFinalMonth(e.target.value)}
+              value={filter.finalMonth || ''}
+            />
             {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
           </FormControl>
         </GridItem>
@@ -107,8 +149,17 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
           <ButtonGroup w='100%' justifyContent='stretch' isDisabled={isLoading}>
             <Button w='100%' onClick={() => clearFilter()}>Clear</Button>
             <Button _hover={{
-              background: 'orange.300',
-            }} bg='orange.400' w='100%' onClick={onSubmit}>Submit</Button>
+                background: 'orange.700',
+              }}
+              bg='orange.500'
+              color='white'
+              bgGradient='linear(to-l, orange.600, orange.400)'
+              w='100%'
+              onClick={onSubmit}
+              isLoading={isLoading}
+            >
+              Submit
+            </Button>
           </ButtonGroup>
         </GridItem>
       </Grid>

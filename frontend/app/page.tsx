@@ -60,7 +60,12 @@ export default function Home() {
           flexDir='column'
           pt='5em'
           px='6em'>
-        <Heading as='h1' size='3xl' color='orange.700'>
+        <Heading
+          as='h1'
+          size='3xl'
+          color='orange.600'
+          pb='5px'
+        >
           World Housing API
         </Heading>
         <Text size='xl'>

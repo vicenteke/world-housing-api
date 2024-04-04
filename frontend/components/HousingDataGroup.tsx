@@ -26,6 +26,10 @@ const HousingDataGroup: FC<HousingDataGroupType> = ({
   variation,
   ...props
 }: HousingDataGroupType) => {
+  const monthText = `${month.substring(5)}/${month.substring(0, 4)}`;
+  const finalMonthText = finalMonth ?
+    `${finalMonth.substring(5)}/${finalMonth.substring(0, 4)}` : '';
+
   return <Box {...props}>
     <Flex alignItems='center' justifyContent='flex-start'>
       <Heading>{name}</Heading>
@@ -36,11 +40,11 @@ const HousingDataGroup: FC<HousingDataGroupType> = ({
             {(variation * 100).toFixed(3)}%
           </StatHelpText>
         </Stat>
-        <Text ml='4em' fontSize='2xl' color='gray.500'>{month}{finalMonth && ` - ${finalMonth}`}</Text>
+        <Text ml='4em' fontSize='2xl' color='gray.500'>{monthText}{finalMonth && ` - ${finalMonthText}`}</Text>
       </>}
     </Flex>
-    <Wrap spacing='70px' mt='1em'>
-      {data.map((stat, index) => <WrapItem key={index}>
+    <Wrap mt='1em'>
+      {data.map((stat, index) => <WrapItem key={index} mr='70px' mb='30px'>
         <HousingDataStat {...stat} />
       </WrapItem>)}
     </Wrap>
