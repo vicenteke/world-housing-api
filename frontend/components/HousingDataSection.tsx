@@ -22,12 +22,18 @@ const HousingDataSection: FC<HousingDataSectionType> = ({
   ...props
 }: HousingDataSectionType) => {
   return <Stack w='100%' pt='4em' pb='50px' px='5em' {...props}>
-    {housingData === null &&
+    {isLoading &&
+      <Stack alignItems='center'>
+        <Text>Fetching housing data...</Text>
+        <CircularProgress isIndeterminate color='orange.400' />
+      </Stack>
+    }
+    {housingData === null && !isLoading &&
       <Text textAlign='center'>
         Use the form above fetch the housing data. The results will be displayed here.
       </Text>
     }
-    {housingData && <>
+    {housingData && !isLoading && <>
       {housingData.length > 0
         ? housingData.map((group, index) => <HousingDataGroup
               key={index}
@@ -35,10 +41,6 @@ const HousingDataSection: FC<HousingDataSectionType> = ({
               {...group}
           />
         )
-        : isLoading ? <Stack justifyContent='center'>
-            <Text>Fetching housing data...</Text>
-            <CircularProgress isIndeterminate color='#A75235' />
-          </Stack>
         : <Text textAlign='center'>
             No data found ;(<br />Use the form above fetch the housing data. The results will be displayed here.
         </Text>
