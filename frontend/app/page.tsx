@@ -1,29 +1,31 @@
 'use client'
-import { useState } from "react";
 import {
+  Container,
   Flex,
   Heading,
+  IconButton,
+  Stack,
   Text
 } from "@chakra-ui/react";
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
-import { HousingDataType } from "@/types";
 import HousingDataSection from "@/components/HousingDataSection";
 import HousingForm from "@/components/HousingForm";
+import { useHousingForm } from "@/hooks/useHousingForm";
 
 
 export default function Home() {
-  const  [housingData, setHousingData] = useState<HousingDataType[]>([]);
-  const  [isLoading, setIsLoading] = useState<boolean>(false);
+  const { data, loading } = useHousingForm();
 
   return (
     <main>
       <Flex
-          w='100%' h='100vh'
+          w='100%' minH='100vh'
           bgImage='url(./wiktor-karkocha-WA2uSCbTXkI-unsplash.jpg)'
           bgRepeat='no-repeat'
           bgSize='cover'
           flexDir='column'
-          py='5em'
+          pt='5em'
           px='6em'>
         <Heading as='h1' size='3xl' color='#A75235'>
           World Housing API
@@ -31,16 +33,31 @@ export default function Home() {
         <Text size='xl'>
           Easily access housing data all around the globe in terms of price per square meter and monthly variation.
         </Text>
-        <HousingForm
-          maxW='lg'
-          alignSelf='center'
-          mt='4em'
-          setData={setHousingData}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
+        <Stack h='100%' justifyContent='space-around' flexGrow={2}>
+          <HousingForm
+            maxW='lg'
+            alignSelf='center'
+            mt='4em'
+          />
+          <Container centerContent>
+            <IconButton
+              as='a'
+              aria-label='Scroll down to see the results'
+              icon={<ChevronDownIcon />}
+              isRound
+              bgColor='white'
+              size='sm'
+              opacity={0.7}
+              href='#housing-data-section'
+            />
+          </Container>
+        </Stack>
       </Flex>
-      <HousingDataSection housingData={housingData} />
+      <HousingDataSection
+        id='housing-data-section'
+        housingData={data}
+        isLoading={loading}
+      />
     </main>
   );
 }

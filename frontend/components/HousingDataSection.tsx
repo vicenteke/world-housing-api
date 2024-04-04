@@ -10,7 +10,7 @@ import HousingDataGroup from "./HousingDataGroup";
 
 
 interface HousingDataSectionType extends StackProps {
-  housingData: HousingDataType[];
+  housingData: HousingDataType[] | null;
   isLoading?: boolean;
 }
 
@@ -21,17 +21,24 @@ const HousingDataSection: FC<HousingDataSectionType> = ({
   ...props
 }: HousingDataSectionType) => {
   return <Stack alignItems='center' w='100%' pt='2em' pb='50px' {...props}>
-    {housingData.length > 0
-      ? housingData.map(
-        (group, index) => <HousingDataGroup key={index} {...group} />)
-      : isLoading ? <Stack>
-          <Text>Fetching housing data...</Text>
-          <CircularProgress isIndeterminate color='#A75235' />
-        </Stack>
-      : <Text>
-          Use the form above fetch the housing data. The results will be displayed here.
+    {housingData === null &&
+      <Text>
+        Use the form above fetch the housing data. The results will be displayed here.
       </Text>
     }
+    {housingData && <>
+      {housingData.length > 0
+        ? housingData.map(
+          (group, index) => <HousingDataGroup key={index} {...group} />)
+        : isLoading ? <Stack>
+            <Text>Fetching housing data...</Text>
+            <CircularProgress isIndeterminate color='#A75235' />
+          </Stack>
+        : <Text textAlign='center'>
+            No data found ;(<br />Use the form above fetch the housing data. The results will be displayed here.
+        </Text>
+      }
+    </>}
   </Stack>;
 }
 
