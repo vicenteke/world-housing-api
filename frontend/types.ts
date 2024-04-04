@@ -12,3 +12,8 @@ export interface HousingDataType {
   variation?: number;
 };
 
+export interface HousingCountryType {
+  name: string;
+  baseUri: string;
+  states?: { name: string, abbreviation: string }[];
+}

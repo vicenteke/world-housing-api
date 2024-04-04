@@ -19,7 +19,15 @@ import { useHousingForm } from "@/hooks/useHousingForm";
 
 
 const HousingForm: FC<CardProps> = (props: CardProps) => {
-  const { fetchData } = useHousingForm();
+  const {
+    fetchData,
+    loading,
+    filter,
+    setCountry,
+    setStates,
+    setInitialMonth,
+    setFinalMonth
+  } = useHousingForm();
 
   function onSubmit() {
     fetchData({

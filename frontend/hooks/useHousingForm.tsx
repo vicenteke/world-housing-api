@@ -96,6 +96,11 @@ export const HousingFormProvider: FC<any> = ({ children }) => {
     if (!_filter.initialMonth)
       throw new Error('You must specify a month');
 
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 10000)
+
     url += `/${_filter.country}`;
     if (_filter.states.length > 0)
       url += `/${_filter.states.join('-')}`;
@@ -109,8 +114,10 @@ export const HousingFormProvider: FC<any> = ({ children }) => {
     }
 
     const response = await axios.get(url);
-    if (response.status !== 200)
+    if (response.status !== 200) {
+      setLoading(false);
       throw new Error(`Failed to fetch housing data: ${response.statusText}`);
+    }
 
     const data = response.data;
     let res: HousingDataType[] = [];
@@ -175,6 +182,8 @@ export const HousingFormProvider: FC<any> = ({ children }) => {
     }
 
     setData(res);
+    setLoading(false);
+
     return res
   }
 
