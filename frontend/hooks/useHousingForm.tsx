@@ -113,10 +113,16 @@ export const HousingFormProvider: FC<any> = ({ children }) => {
         + `/${_filter.finalMonth.substring(5)}`;
     }
 
-    const response = await axios.get(url);
-    if (response.status !== 200) {
+    let response: any;
+    try {
+      response = await axios.get(url);
+      if (response.status !== 200) {
+        setLoading(false);
+        throw new Error(`Failed to fetch housing data: ${response.statusText}`);
+      }
+    } catch (e) {
       setLoading(false);
-      throw new Error(`Failed to fetch housing data: ${response.statusText}`);
+      throw new Error(`Failed to fetch housing data: ${e}`);
     }
 
     const data = response.data;

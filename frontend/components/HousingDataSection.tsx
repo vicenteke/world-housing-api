@@ -1,5 +1,4 @@
-'use client'
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import {
   CircularProgress,
   Stack,
