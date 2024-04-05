@@ -1,10 +1,20 @@
 # world-housing-api
-*world-housing-api* is a Django REST Framework (DRF) project intended to serve data concerning housing prices and monthly variations from several countries in the same place.
+*world-housing-api* is a **Django REST Framework (DRF)** project intended to serve data concerning housing prices and monthly variations from several countries in the same place.
+It also has an interface made using **Next.js** and **Chakra UI**.
 
 You can check the auto-generated docs or some documentation under the `docs/` folder.
 
-## Usage
+## Front-End
+Implemented using Next.js and Chakra UI. To run it, go to the `frontend/` folder and run `npm run dev`. Here is a visualization of it:
+
+https://github.com/vicenteke/world-housing-api/assets/50879722/0a7d1f6b-a843-4811-86b9-0221ed4e6b95
+
+
+## Back-End
+Implemented using the **Django REST Framework (DRF)**. To run it, go to the `backend/world-housing-api/` folder and run `python manage.py runserver`. You might wnat to create a virtual environment (`venv`), so make sure are running the commands from there.
+
 ### Get housing data for a specific month for a specific country
+
 ```
 GET /housing/<country>/<year>/<month>
 ```
