@@ -20,6 +20,7 @@ import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import { useHousingForm } from "@/hooks/useHousingForm";
 import { useHousingConstants } from "@/hooks/useHousingConstants";
 
+import { ChevronRightIcon } from "@chakra-ui/icons";
 import Autocomplete from "./Autocomplete";
 
 
@@ -43,7 +44,13 @@ const OPTIONS = [
 const HousingForm: FC<CardProps> = (props: CardProps) => {
   return <Card {...props}>
     <CardBody width='300px'>
-      <Autocomplete options={OPTIONS}/>
+      <Autocomplete
+        options={OPTIONS}
+        error='my error message is actually pretty cool.'
+        label='Autocomplete'
+        help='type in the text you want and select the options that match'
+        baseProps={{ isRequired: true, isInvalid: true }}
+      />
     </CardBody>
   </Card>;
 }

@@ -1,5 +1,5 @@
 'use client'
-import { FC, ReactNode, useRef } from "react";
+import { FC, ReactNode } from "react";
 import {
   Tag,
   TagCloseButton,
@@ -21,11 +21,15 @@ const AutocompleteTag: FC<AutocompleteTagProps> = ({
   value,
   ...props
 }: AutocompleteTagProps) => {
+  /*A tag with close button to be used by the autocomplete component*/
   const {children, ...tagProps} = props;
   return <Tag
     {...tagProps}
   >
+    {/* Use custom children if provided */}
     {children}
+
+    {/* Use default tag with close button if no children provided */}
     {!children && <>
       {typeof label === 'string' ? <TagLabel>{label}</TagLabel> : {label}}
       <TagCloseButton onClick={() => toggleOption(value)} />

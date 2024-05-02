@@ -1,7 +1,14 @@
 'use client'
-import { FC, useRef } from "react";
+import React, { FC, useRef } from "react";
 import {
-  Tag,
+  FormControl,
+  FormControlProps,
+  FormLabel,
+  FormLabelProps,
+  FormErrorMessage,
+  FormErrorMessageProps,
+  FormHelperText,
+  FormHelperTextProps,
   Input,
   InputGroup,
   InputRightElement,
@@ -10,6 +17,12 @@ import {
   MenuItem,
   Portal,
   Stack,
+  TagProps,
+  InputGroupProps,
+  InputProps,
+  MenuProps,
+  MenuListProps,
+  MenuItemProps,
 } from "@chakra-ui/react";
 import {
   ChevronDownIcon,
@@ -24,20 +37,52 @@ import AutocompleteTag from "./AutocompleteTag";
 export interface IAutocomplete extends IAutocompleteHook {
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
-  error?: string; // TODO
+  openMenuIcon?: React.ReactElement;
+  closeMenuIcon?: React.ReactElement;
+  tagProps?: TagProps;
+  inputGroupProps?: InputGroupProps;
+  inputProps?: InputProps;
+  menuProps?: MenuProps;
+  menuAnchorRef?: React.MutableRefObject<any>;
+  menuListProps?: MenuListProps;
+  listIcon?: React.ReactElement;
+  menuItemProps?: MenuItemProps;
+
+  baseProps?: FormControlProps
+  label?: string | React.ReactElement;
+  labelProps?: FormLabelProps;
+  help?: string | React.ReactElement;
+  helpProps?: FormHelperTextProps;
+  error?: string | React.ReactElement;
+  errorProps?: FormErrorMessageProps;
 }
 
 
 const Autocomplete: FC<IAutocomplete> = ({
+  baseProps,
+  closeMenuIcon,
   disabled,
+  error,
+  errorProps,
+  help,
+  helpProps,
+  inputGroupProps,
+  inputProps,
+  label,
+  labelProps,
+  listIcon,
+  menuAnchorRef,
+  menuItemProps,
+  menuListProps,
+  menuProps,
+  openMenuIcon,
   size,
+  tagProps,
   ...hookProps
 }: IAutocomplete) => {
   const ref = useRef(null);
   const {
     value,
-    setValue,
-    clearSearch,
     searchString,
     setSearchString,
     optionsExpanded,
@@ -47,7 +92,13 @@ const Autocomplete: FC<IAutocomplete> = ({
     search,
   } = useAutocomplete(hookProps);
 
-  return <>
+  return <FormControl {...baseProps}>
+    {label &&
+      (typeof label === 'string' ?
+      <FormLabel {...labelProps}>{label}</FormLabel>
+      : label)
+    }
+
     <Stack
       direction='row'
       flexWrap='wrap'
@@ -63,22 +114,24 @@ const Autocomplete: FC<IAutocomplete> = ({
           const option = hookProps.options?.find((item) => item.value === val);
           return <AutocompleteTag
             key={val}
-            toggleOption={toggleOption}
+            toggleOption={disabled ? (val: any) => {return} : toggleOption}
             value={val}
             label={option?.label || val}
+            {...tagProps}
           />
         })
         : <AutocompleteTag
-            toggleOption={toggleOption}
+            toggleOption={disabled ? (val: any) => {return} : toggleOption}
             value={value}
             label={
               hookProps.options?.find((item) => item.value === value)?.label
               || value
             }
+            {...tagProps}
           />
       }
     </Stack>
-    <InputGroup>
+    <InputGroup {...inputGroupProps}>
       <Input
         value={searchString}
         onChange={(e) => {
@@ -89,15 +142,36 @@ const Autocomplete: FC<IAutocomplete> = ({
         onClick={() => setOptionsExpanded(true)}
         size={size}
         disabled={disabled}
+        {...inputProps}
       />
       <InputRightElement onClick={() => setOptionsExpanded(!optionsExpanded)}>
-        {optionsExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        {optionsExpanded ?
+          (closeMenuIcon || <ChevronUpIcon />)
+          : (openMenuIcon || <ChevronDownIcon />)
+        }
       </InputRightElement>
     </InputGroup>
-    <InputGroup ref={ref} style={{ width: '100%', marginTop: optionsExpanded ? 8 : 0 }} />
-    <Menu isOpen={optionsExpanded} closeOnSelect={hookProps.isSingleSelect}>
-      <Portal containerRef={ref}>
-          <MenuList>
+
+    {!menuAnchorRef && <InputGroup ref={ref} />}
+
+    {help &&
+      (typeof help === 'string' ?
+      <FormHelperText {...helpProps}>{help}</FormHelperText>
+      : help)
+    }
+
+    {error &&
+      (typeof error === 'string' ?
+      <FormErrorMessage {...errorProps}>{error}</FormErrorMessage>
+      : error)
+    }
+
+    <Menu isOpen={optionsExpanded}
+      closeOnSelect={hookProps.isSingleSelect}
+      {...menuProps}
+    >
+      <Portal containerRef={menuAnchorRef || ref}>
+          <MenuList mt={2} {...menuListProps}>
             {searchResult.map((option) => (
               <MenuItem
                 key={String(option.value)}
@@ -108,8 +182,9 @@ const Autocomplete: FC<IAutocomplete> = ({
                     !hookProps.isSingleSelect &&
                     value.find((val: any) => val === option.value)
                   )
-                  ? <CheckIcon color='green' /> : undefined
+                  ? (listIcon || <CheckIcon color='green' />) : undefined
                 }
+                {...menuItemProps}
               >
                 {option.label}
               </MenuItem>
@@ -117,7 +192,7 @@ const Autocomplete: FC<IAutocomplete> = ({
           </MenuList>
       </Portal>
     </Menu>
-  </>;
+  </FormControl>;
 }
 
 export default Autocomplete;
