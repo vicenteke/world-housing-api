@@ -23,6 +23,8 @@ import {
   MenuProps,
   MenuListProps,
   MenuItemProps,
+  useFormControlProps,
+  StackProps,
 } from "@chakra-ui/react";
 import {
   ChevronDownIcon,
@@ -30,25 +32,26 @@ import {
   CheckIcon,
 } from "@chakra-ui/icons";
 
-import useAutocomplete, { IAutocompleteHook } from "../hooks/useAutocomplete";
+import useAutocomplete, { AutocompleteHookProps } from "../hooks/useAutocomplete";
 import AutocompleteTag from "./AutocompleteTag";
 
 
-export interface IAutocomplete extends IAutocompleteHook {
+export interface AutocompleteOnlyProps extends AutocompleteHookProps {
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
   openMenuIcon?: React.ReactElement;
   closeMenuIcon?: React.ReactElement;
   tagProps?: TagProps;
+  tagStackProps?: StackProps;
   inputGroupProps?: InputGroupProps;
   inputProps?: InputProps;
   menuProps?: MenuProps;
   menuAnchorRef?: React.MutableRefObject<any>;
   menuListProps?: MenuListProps;
+  menuGutter?: number;
   listIcon?: React.ReactElement;
   menuItemProps?: MenuItemProps;
 
-  baseProps?: FormControlProps
   label?: string | React.ReactElement;
   labelProps?: FormLabelProps;
   help?: string | React.ReactElement;
@@ -57,9 +60,10 @@ export interface IAutocomplete extends IAutocompleteHook {
   errorProps?: FormErrorMessageProps;
 }
 
+export type AutocompleteProps = AutocompleteOnlyProps & FormControlProps;
 
-const Autocomplete: FC<IAutocomplete> = ({
-  baseProps,
+
+const Autocomplete: FC<AutocompleteProps> = ({
   closeMenuIcon,
   disabled,
   error,
@@ -72,15 +76,34 @@ const Autocomplete: FC<IAutocomplete> = ({
   labelProps,
   listIcon,
   menuAnchorRef,
+  menuGutter,
   menuItemProps,
   menuListProps,
   menuProps,
   openMenuIcon,
   size,
   tagProps,
-  ...hookProps
-}: IAutocomplete) => {
+  tagStackProps,
+  ...props
+}: AutocompleteProps) => {
   const ref = useRef(null);
+
+  let formControlProps: FormControlProps = {};
+  let hookProps: AutocompleteHookProps = {options: props.options};
+  const formControlPropsKeys = Object.keys(useFormControlProps({}));
+  const formControlPropsEntries: [string, any][] = Object.entries(props).filter(
+    (entry) => formControlPropsKeys.includes(entry[0])
+  );
+  const hookPropsEntries = Object.entries(props).filter(
+    (entry) => !formControlPropsKeys.includes(entry[0])
+  );
+
+  for (const entry of formControlPropsEntries)
+    formControlProps[entry[0] as keyof FormControlProps] = entry[1];
+
+  for (const entry of hookPropsEntries)
+    hookProps[entry[0] as keyof AutocompleteHookProps] = entry[1];
+
   const {
     value,
     searchString,
@@ -92,7 +115,7 @@ const Autocomplete: FC<IAutocomplete> = ({
     search,
   } = useAutocomplete(hookProps);
 
-  return <FormControl {...baseProps}>
+  return <FormControl {...formControlProps}>
     {label &&
       (typeof label === 'string' ?
       <FormLabel {...labelProps}>{label}</FormLabel>
@@ -103,15 +126,17 @@ const Autocomplete: FC<IAutocomplete> = ({
       direction='row'
       flexWrap='wrap'
       width='100%'
-      mb={
-        (hookProps.isSingleSelect && ![undefined, null].includes(value)) ||
-        (Array.isArray(value) && value.length > 0)
-        ? 2 : 0
+      visibility={
+        (props.isSingleSelect && ![undefined, null].includes(value))
+          || (Array.isArray(value) && value.length > 0)
+        ? 'inherit' : 'hidden'
       }
+      mb={2}
+      {...tagStackProps}
     >
       {Array.isArray(value) ?
         value.map((val) => {
-          const option = hookProps.options?.find((item) => item.value === val);
+          const option = props.options?.find((item) => item.value === val);
           return <AutocompleteTag
             key={val}
             toggleOption={disabled ? (val: any) => {return} : toggleOption}
@@ -120,15 +145,15 @@ const Autocomplete: FC<IAutocomplete> = ({
             {...tagProps}
           />
         })
-        : <AutocompleteTag
-            toggleOption={disabled ? (val: any) => {return} : toggleOption}
-            value={value}
-            label={
-              hookProps.options?.find((item) => item.value === value)?.label
-              || value
-            }
-            {...tagProps}
-          />
+        : (value && <AutocompleteTag
+          toggleOption={disabled ? (val: any) => {return} : toggleOption}
+          value={value}
+          label={
+            props.options?.find((item) => item.value === value)?.label
+            || value
+          }
+          {...tagProps}
+        />)
       }
     </Stack>
     <InputGroup {...inputGroupProps}>
@@ -167,19 +192,22 @@ const Autocomplete: FC<IAutocomplete> = ({
     }
 
     <Menu isOpen={optionsExpanded}
-      closeOnSelect={hookProps.isSingleSelect}
+      closeOnSelect={props.isSingleSelect}
       {...menuProps}
     >
       <Portal containerRef={menuAnchorRef || ref}>
-          <MenuList mt={2} {...menuListProps}>
+          <MenuList
+            mt={menuGutter === undefined ? 2 : menuGutter}
+            {...menuListProps}
+          >
             {searchResult.map((option) => (
               <MenuItem
                 key={String(option.value)}
                 onClick={() => toggleOption(option.value)}
                 icon={
-                  (hookProps.isSingleSelect && option.value === value) ||
+                  (props.isSingleSelect && option.value === value) ||
                   (
-                    !hookProps.isSingleSelect &&
+                    !props.isSingleSelect &&
                     value.find((val: any) => val === option.value)
                   )
                   ? (listIcon || <CheckIcon color='green' />) : undefined

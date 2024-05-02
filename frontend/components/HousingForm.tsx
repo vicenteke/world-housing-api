@@ -43,13 +43,16 @@ const OPTIONS = [
 
 const HousingForm: FC<CardProps> = (props: CardProps) => {
   return <Card {...props}>
-    <CardBody width='300px'>
+    <CardBody>
       <Autocomplete
         options={OPTIONS}
         error='my error message is actually pretty cool.'
         label='Autocomplete'
         help='type in the text you want and select the options that match'
-        baseProps={{ isRequired: true, isInvalid: true }}
+        isCaseInsensitive
+        isSingleSelect
+        isRequired
+        isInvalid
       />
     </CardBody>
   </Card>;

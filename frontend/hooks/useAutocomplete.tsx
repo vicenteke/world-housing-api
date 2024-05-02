@@ -2,15 +2,15 @@
 import { useState } from "react";
 
 
-interface IAutocompleteOption {
+interface AutocompleteOptionProps {
   label: string;
   value: any;
 }
 
-interface IAutocompleteHook {
-  options: IAutocompleteOption[];
+interface AutocompleteHookProps {
+  options: AutocompleteOptionProps[];
   isSingleSelect?: boolean;
-  findOptions?: (search: string) => IAutocompleteOption[];
+  findOptions?: (search: string) => AutocompleteOptionProps[];
   isCaseInsensitive?: boolean;
 }
 
@@ -20,10 +20,10 @@ const useAutocomplete = ({
   isSingleSelect,
   findOptions,
   isCaseInsensitive,
-}: IAutocompleteHook) => {
+}: AutocompleteHookProps) => {
   const [value, setValue] = useState<any>(isSingleSelect ? null : []);
   const [searchString, setSearchString] = useState<string>('');
-  const [searchResult, setsearchResult] = useState<IAutocompleteOption[]>(options);
+  const [searchResult, setsearchResult] = useState<AutocompleteOptionProps[]>(options);
   const [optionsExpanded, setOptionsExpanded] = useState<boolean>(false);
 
   function clearSearch() {
@@ -147,4 +147,4 @@ const useAutocomplete = ({
 };
 
 export default useAutocomplete;
-export type { IAutocompleteHook, IAutocompleteOption }
+export type { AutocompleteHookProps, AutocompleteOptionProps }
