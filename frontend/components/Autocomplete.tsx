@@ -34,9 +34,20 @@ import {
 
 import useAutocomplete, {
   AutocompleteHookProps,
-  AutocompleteHookPropsList
+  AutocompleteHookPropsList,
+  AutocompleteOptionProps
 } from "../hooks/useAutocomplete";
 import AutocompleteTag from "./AutocompleteTag";
+
+
+export interface AutocompleteMenuItemProps extends MenuItemProps {
+  option: AutocompleteOptionProps;
+  itemKey: string | number;
+  onClickHandler: () => void;
+  onBlurHandler: () => void;
+  isDisabled?: boolean;
+  icon?: React.ReactElement;
+}
 
 
 export interface AutocompleteOnlyProps extends AutocompleteHookProps {
@@ -54,6 +65,7 @@ export interface AutocompleteOnlyProps extends AutocompleteHookProps {
   menuGutter?: number;
   listIcon?: React.ReactElement;
   menuItemProps?: MenuItemProps;
+  renderMenuItem?: (props: AutocompleteMenuItemProps) => React.ReactElement;
 
   label?: string | React.ReactElement;
   labelProps?: FormLabelProps;
@@ -84,6 +96,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
   menuListProps,
   menuProps,
   openMenuIcon,
+  renderMenuItem,
   size,
   tagProps,
   tagStackProps,
@@ -229,28 +242,41 @@ const Autocomplete: FC<AutocompleteProps> = ({
               isDisabled={isDisabled}
               {...menuListProps}
             >
-              {searchResult.map((option) => (
-                <MenuItem
-                  key={String(option.value)}
-                  onClick={() => {
-                    toggleOption(option.value);
-                    focusInput();
-                  }}
-                  onBlur={() => focusInput()}
-                  isDisabled={isDisabled}
-                  icon={
-                    (props.isSingleSelect && option.value === value) ||
-                    (
+              {searchResult.map((option, index) => {
+                const onClickHandler = () => {
+                  toggleOption(option.value);
+                  focusInput();
+                };
+                const onBlurHandler = () => focusInput();
+                const itemKey = String(option.value) || index;
+                const itemProps: any = {
+                  isDisabled: isDisabled,
+                  icon: (props.isSingleSelect && option.value === value)
+                    || (
                       !props.isSingleSelect &&
                       value.find((val: any) => val === option.value)
                     )
-                    ? (listIcon || <CheckIcon color='green' />) : undefined
-                  }
-                  {...menuItemProps}
+                    ? (listIcon || <CheckIcon color='green' />) : undefined,
+                  ...menuItemProps
+                };
+                if (renderMenuItem)
+                  return renderMenuItem({
+                    itemKey,
+                    onBlurHandler,
+                    onClickHandler,
+                    option,
+                    ...itemProps
+                  });
+
+                return <MenuItem
+                  key={itemKey}
+                  onClick={onClickHandler}
+                  onBlur={onBlurHandler}
+                  {...itemProps}
                 >
                   {option.label}
                 </MenuItem>
-              ))}
+              })}
             </MenuList>
         </Portal>
       </Menu>

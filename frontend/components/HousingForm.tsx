@@ -14,7 +14,8 @@ import {
   GridItem,
   Input,
   Select,
-  Text
+  Text,
+  MenuItem,
 } from "@chakra-ui/react";
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import { useHousingForm } from "@/hooks/useHousingForm";
@@ -33,6 +34,13 @@ import Autocomplete from "./Autocomplete";
  * Write README
  * Transform project into npm package
 */
+
+const renderMenuItemCustom = (props: any) => {
+  const {itemKey, onClickHandler, onBlurHandler, option, ...itemProps} = props;
+  return <MenuItem key={itemKey} onClick={onClickHandler} onBlur={onBlurHandler} {...itemProps}>
+    {option.value}
+  </MenuItem>
+}
 
 
 interface Errors {
