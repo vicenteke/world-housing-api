@@ -37,7 +37,7 @@ import AutocompleteTag from "./AutocompleteTag";
 
 
 export interface AutocompleteOnlyProps extends AutocompleteHookProps {
-  disabled?: boolean;
+  isDisabled?: boolean;
   size?: 'small' | 'medium' | 'large';
   openMenuIcon?: React.ReactElement;
   closeMenuIcon?: React.ReactElement;
@@ -65,7 +65,7 @@ export type AutocompleteProps = AutocompleteOnlyProps & FormControlProps;
 
 const Autocomplete: FC<AutocompleteProps> = ({
   closeMenuIcon,
-  disabled,
+  isDisabled,
   error,
   errorProps,
   help,
@@ -115,7 +115,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
     search,
   } = useAutocomplete(hookProps);
 
-  return <FormControl {...formControlProps}>
+  return <FormControl isDisabled={isDisabled} {...formControlProps}>
     {label &&
       (typeof label === 'string' ?
       <FormLabel {...labelProps}>{label}</FormLabel>
@@ -131,7 +131,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
           || (Array.isArray(value) && value.length > 0)
         ? 'inherit' : 'hidden'
       }
-      mb={2}
+      mb={3}
       {...tagStackProps}
     >
       {Array.isArray(value) ?
@@ -139,14 +139,14 @@ const Autocomplete: FC<AutocompleteProps> = ({
           const option = props.options?.find((item) => item.value === val);
           return <AutocompleteTag
             key={val}
-            toggleOption={disabled ? (val: any) => {return} : toggleOption}
+            toggleOption={isDisabled ? (val: any) => {return} : toggleOption}
             value={val}
             label={option?.label || val}
             {...tagProps}
           />
         })
         : (value && <AutocompleteTag
-          toggleOption={disabled ? (val: any) => {return} : toggleOption}
+          toggleOption={isDisabled ? (val: any) => {return} : toggleOption}
           value={value}
           label={
             props.options?.find((item) => item.value === value)?.label
@@ -156,7 +156,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
         />)
       }
     </Stack>
-    <InputGroup {...inputGroupProps}>
+    <InputGroup isDisabled={isDisabled} {...inputGroupProps}>
       <Input
         value={searchString}
         onChange={(e) => {
@@ -166,7 +166,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
         }}
         onClick={() => setOptionsExpanded(true)}
         size={size}
-        disabled={disabled}
+        isDisabled={isDisabled}
         {...inputProps}
       />
       <InputRightElement onClick={() => setOptionsExpanded(!optionsExpanded)}>
@@ -181,13 +181,13 @@ const Autocomplete: FC<AutocompleteProps> = ({
 
     {help &&
       (typeof help === 'string' ?
-      <FormHelperText {...helpProps}>{help}</FormHelperText>
+      <FormHelperText isDisabled={isDisabled} {...helpProps}>{help}</FormHelperText>
       : help)
     }
 
     {error &&
       (typeof error === 'string' ?
-      <FormErrorMessage {...errorProps}>{error}</FormErrorMessage>
+      <FormErrorMessage isDisabled={isDisabled} {...errorProps}>{error}</FormErrorMessage>
       : error)
     }
 
@@ -198,12 +198,14 @@ const Autocomplete: FC<AutocompleteProps> = ({
       <Portal containerRef={menuAnchorRef || ref}>
           <MenuList
             mt={menuGutter === undefined ? 2 : menuGutter}
+            isDisabled={isDisabled}
             {...menuListProps}
           >
             {searchResult.map((option) => (
               <MenuItem
                 key={String(option.value)}
                 onClick={() => toggleOption(option.value)}
+                isDisabled={isDisabled}
                 icon={
                   (props.isSingleSelect && option.value === value) ||
                   (

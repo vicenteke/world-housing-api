@@ -52,6 +52,7 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
         isCaseInsensitive
         isSingleSelect
         isRequired
+        isDisabled
         isInvalid
       />
     </CardBody>
