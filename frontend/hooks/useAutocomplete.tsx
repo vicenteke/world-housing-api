@@ -14,6 +14,14 @@ interface AutocompleteHookProps {
   isCaseInsensitive?: boolean;
 }
 
+// We rather keep a list here in order to keep related data in the same file
+export const AutocompleteHookPropsList = [
+  'options',
+  'isSingleSelect',
+  'findOptions',
+  'isCaseInsensitive',
+]
+
 
 const useAutocomplete = ({
   options,
@@ -23,30 +31,30 @@ const useAutocomplete = ({
 }: AutocompleteHookProps) => {
   const [value, setValue] = useState<any>(isSingleSelect ? null : []);
   const [searchString, setSearchString] = useState<string>('');
-  const [searchResult, setsearchResult] = useState<AutocompleteOptionProps[]>(options);
+  const [searchResult, setSearchResult] = useState<AutocompleteOptionProps[]>(options);
   const [optionsExpanded, setOptionsExpanded] = useState<boolean>(false);
 
   function clearSearch() {
     setSearchString('');
-    setsearchResult(options);
+    setSearchResult(options);
   };
 
   function reset() {
     clearSearch();
     setValue(isSingleSelect ? null : []);
-    setsearchResult(options);
+    setSearchResult(options);
   };
 
   function search(_searchString?: string) {
     const searchTerm = _searchString === undefined ? searchString : _searchString;
     if (findOptions) {
       let res = findOptions(searchTerm);
-      setsearchResult(res);
+      setSearchResult(res);
       return res;
     }
 
     if (!searchTerm) {
-      setsearchResult(options);
+      setSearchResult(options);
       return options;
     }
 
@@ -66,7 +74,7 @@ const useAutocomplete = ({
           || optionValue.includes(searchValue))
         res.push(option);
     }
-    setsearchResult(res);
+    setSearchResult(res);
     return res;
   };
 
@@ -142,7 +150,7 @@ const useAutocomplete = ({
     unselectOption,
     toggleOption,
     searchResult,
-    setsearchResult,
+    setSearchResult,
   }
 };
 

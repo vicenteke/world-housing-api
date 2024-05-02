@@ -23,7 +23,6 @@ import {
   MenuProps,
   MenuListProps,
   MenuItemProps,
-  useFormControlProps,
   StackProps,
 } from "@chakra-ui/react";
 import {
@@ -32,7 +31,10 @@ import {
   CheckIcon,
 } from "@chakra-ui/icons";
 
-import useAutocomplete, { AutocompleteHookProps } from "../hooks/useAutocomplete";
+import useAutocomplete, {
+  AutocompleteHookProps,
+  AutocompleteHookPropsList
+} from "../hooks/useAutocomplete";
 import AutocompleteTag from "./AutocompleteTag";
 
 
@@ -86,16 +88,18 @@ const Autocomplete: FC<AutocompleteProps> = ({
   tagStackProps,
   ...props
 }: AutocompleteProps) => {
-  const ref = useRef(null);
+  const defaultMenuAnchorRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // split hook props
+  let hookProps: AutocompleteHookProps = {options: props.options};
+  const hookPropsEntries = Object.entries(props).filter(
+    (entry) => AutocompleteHookPropsList.includes(entry[0])
+  );
 
   let formControlProps: FormControlProps = {};
-  let hookProps: AutocompleteHookProps = {options: props.options};
-  const formControlPropsKeys = Object.keys(useFormControlProps({}));
   const formControlPropsEntries: [string, any][] = Object.entries(props).filter(
-    (entry) => formControlPropsKeys.includes(entry[0])
-  );
-  const hookPropsEntries = Object.entries(props).filter(
-    (entry) => !formControlPropsKeys.includes(entry[0])
+    (entry) => !AutocompleteHookPropsList.includes(entry[0])
   );
 
   for (const entry of formControlPropsEntries)
@@ -114,6 +118,14 @@ const Autocomplete: FC<AutocompleteProps> = ({
     searchResult,
     search,
   } = useAutocomplete(hookProps);
+
+  // Create click-away listener to blur autocomplete
+  if (window)
+    window.addEventListener('click', () => setOptionsExpanded(false));
+
+  function focusInput() {
+    ((inputRef.current as unknown) as HTMLInputElement).focus();
+  }
 
   return <FormControl isDisabled={isDisabled} {...formControlProps}>
     {label &&
@@ -142,6 +154,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
             toggleOption={isDisabled ? (val: any) => {return} : toggleOption}
             value={val}
             label={option?.label || val}
+            inputRef={inputRef}
             {...tagProps}
           />
         })
@@ -152,24 +165,42 @@ const Autocomplete: FC<AutocompleteProps> = ({
             props.options?.find((item) => item.value === value)?.label
             || value
           }
+          inputRef={inputRef}
           {...tagProps}
         />)
       }
     </Stack>
     <InputGroup isDisabled={isDisabled} {...inputGroupProps}>
       <Input
+        ref={inputRef}
         value={searchString}
         onChange={(e) => {
-          setSearchString(e.target.value);
-          setOptionsExpanded(true);
-          search(e.target.value);
+          if (searchString !== e.target.value) {
+            setSearchString(e.target.value);
+            setOptionsExpanded(true);
+            search(e.target.value);
+  
+            // enforce focus
+            setTimeout(
+              () => focusInput(),
+              100
+            );
+          }
         }}
-        onClick={() => setOptionsExpanded(true)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOptionsExpanded(true);
+        }}
         size={size}
         isDisabled={isDisabled}
         {...inputProps}
       />
-      <InputRightElement onClick={() => setOptionsExpanded(!optionsExpanded)}>
+      <InputRightElement
+        onClick={(e) => {
+          e.stopPropagation();
+          setOptionsExpanded(!optionsExpanded)
+        }}
+      >
         {optionsExpanded ?
           (closeMenuIcon || <ChevronUpIcon />)
           : (openMenuIcon || <ChevronDownIcon />)
@@ -177,7 +208,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
       </InputRightElement>
     </InputGroup>
 
-    {!menuAnchorRef && <InputGroup ref={ref} />}
+    {!menuAnchorRef && <InputGroup ref={defaultMenuAnchorRef} />}
 
     {help &&
       (typeof help === 'string' ?
@@ -193,9 +224,10 @@ const Autocomplete: FC<AutocompleteProps> = ({
 
     <Menu isOpen={optionsExpanded}
       closeOnSelect={props.isSingleSelect}
+      initialFocusRef={inputRef}
       {...menuProps}
     >
-      <Portal containerRef={menuAnchorRef || ref}>
+      <Portal containerRef={menuAnchorRef || defaultMenuAnchorRef}>
           <MenuList
             mt={menuGutter === undefined ? 2 : menuGutter}
             isDisabled={isDisabled}
@@ -204,7 +236,12 @@ const Autocomplete: FC<AutocompleteProps> = ({
             {searchResult.map((option) => (
               <MenuItem
                 key={String(option.value)}
-                onClick={() => toggleOption(option.value)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleOption(option.value);
+                  focusInput();
+                }}
+                onBlur={(e) => focusInput()}
                 isDisabled={isDisabled}
                 icon={
                   (props.isSingleSelect && option.value === value) ||

@@ -1,5 +1,5 @@
 'use client'
-import { FC, ReactNode } from "react";
+import { FC, MutableRefObject, ReactNode } from "react";
 import {
   Tag,
   TagCloseButton,
@@ -12,6 +12,7 @@ export interface AutocompleteTagProps extends TagProps {
   label: ReactNode | string;
   toggleOption: (value: any) => any;
   value: any;
+  inputRef?: MutableRefObject<HTMLInputElement | null>;
 }
 
 
@@ -19,6 +20,7 @@ const AutocompleteTag: FC<AutocompleteTagProps> = ({
   label,
   toggleOption,
   value,
+  inputRef,
   ...props
 }: AutocompleteTagProps) => {
   /*A tag with close button to be used by the autocomplete component*/
@@ -32,7 +34,12 @@ const AutocompleteTag: FC<AutocompleteTagProps> = ({
     {/* Use default tag with close button if no children provided */}
     {!children && <>
       {typeof label === 'string' ? <TagLabel>{label}</TagLabel> : {label}}
-      <TagCloseButton onClick={() => toggleOption(value)} />
+      <TagCloseButton onClick={(e) => {
+        e.stopPropagation();
+        toggleOption(value);
+        if (inputRef && inputRef.current)
+          inputRef.current.focus();
+      }} />
     </>}
   </Tag>
 }

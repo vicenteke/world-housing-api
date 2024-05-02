@@ -23,6 +23,16 @@ import { useHousingConstants } from "@/hooks/useHousingConstants";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import Autocomplete from "./Autocomplete";
 
+/* TODOs
+ * [OK] Fix focus issues
+ * [OK] Implement click-away listener
+ * Improve customizability by allowing passing components to all levels (e.g. MenuItem, Tag, Label, HelperText...)
+ * Check code style/linter
+ * Write comments
+ * Write README
+ * Transform project into npm package
+*/
+
 
 interface Errors {
     country?: string,
@@ -49,11 +59,15 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
         error='my error message is actually pretty cool.'
         label='Autocomplete'
         help='type in the text you want and select the options that match'
-        isCaseInsensitive
-        isSingleSelect
         isRequired
-        isDisabled
-        isInvalid
+        mb={4}
+      />
+      <Autocomplete
+        options={OPTIONS}
+        error='my error message is actually pretty cool.'
+        label='Autocomplete 2'
+        help='type in the text you want and select the options that match'
+        isRequired
       />
     </CardBody>
   </Card>;
