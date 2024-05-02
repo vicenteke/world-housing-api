@@ -28,7 +28,7 @@ import Autocomplete from "./Autocomplete";
  * [OK] Fix focus issues
  * [OK] Implement click-away listener
  * [OK] Fix issues when using multiple autocompletes
- * Improve customizability by allowing passing components to all levels (e.g. MenuItem, Tag, Label, HelperText...)
+ * [OK] Improve customizability by allowing passing components to all levels (e.g. MenuItem, Tag, Label, HelperText...)
  * Check code style/linter
  * Write comments
  * Write README
@@ -71,12 +71,17 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
         isRequired
         mb={4}
       />
+      <Input size='large' />
+      <Input size='large' />
+      <Input size='large' />
+      <Input size='large' />
       <Autocomplete
         options={OPTIONS}
+        renderMenuItem={renderMenuItemCustom}
         error='my error message is actually pretty cool.'
         label='Autocomplete 2'
         help='type in the text you want and select the options that match'
-        isRequired
+        hideRightIcon
       />
     </CardBody>
   </Card>;

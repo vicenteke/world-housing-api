@@ -55,6 +55,7 @@ export interface AutocompleteOnlyProps extends AutocompleteHookProps {
   size?: 'small' | 'medium' | 'large';
   openMenuIcon?: React.ReactElement;
   closeMenuIcon?: React.ReactElement;
+  hideRightIcon?: boolean;
   tagProps?: TagProps;
   tagStackProps?: StackProps;
   inputGroupProps?: InputGroupProps;
@@ -85,6 +86,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
   errorProps,
   help,
   helpProps,
+  hideRightIcon,
   inputGroupProps,
   inputProps,
   label,
@@ -207,14 +209,16 @@ const Autocomplete: FC<AutocompleteProps> = ({
           isDisabled={isDisabled}
           {...inputProps}
         />
-        <InputRightElement
-          onClick={() => setOptionsExpanded(!optionsExpanded)}
-        >
-          {optionsExpanded ?
-            (closeMenuIcon || <ChevronUpIcon />)
-            : (openMenuIcon || <ChevronDownIcon />)
-          }
-        </InputRightElement>
+        {!hideRightIcon &&
+          <InputRightElement
+            onClick={() => setOptionsExpanded(!optionsExpanded)}
+          >
+            {optionsExpanded ?
+              (closeMenuIcon || <ChevronUpIcon />)
+              : (openMenuIcon || <ChevronDownIcon />)
+            }
+          </InputRightElement>
+        }
       </InputGroup>
 
       {!menuAnchorRef && <InputGroup ref={defaultMenuAnchorRef} zIndex='dropdown' position='relative' />}
