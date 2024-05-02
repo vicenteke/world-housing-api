@@ -78,7 +78,9 @@ const useAutocomplete = ({
     if (isSingleSelect && value !== optionValue)
       newValue = optionValue;
     else if (!isSingleSelect && !value.includes(optionValue))
-      newValue.push(optionValue);
+      newValue = options.filter(
+        (option) => option.value === optionValue || value.includes(option.value)
+      );
 
     setValue(newValue);
     return newValue;
@@ -117,11 +119,12 @@ const useAutocomplete = ({
           (itemValue: any) => itemValue !== optionValue
         );
       else
-        newValue.push(optionValue);
+      newValue = options.filter(
+        (option) => option.value === optionValue || value.includes(option.value)
+      ).map((option) => option.value);
     }
 
     setValue(newValue);
-    console.log('>>>>>>>>>>>>>>>>>>.', newValue)
     return newValue;
   }
 

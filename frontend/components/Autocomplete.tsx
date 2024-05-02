@@ -1,7 +1,7 @@
 'use client'
 import { FC, useRef } from "react";
 import {
-  Badge,
+  Tag,
   Input,
   InputGroup,
   InputRightElement,
@@ -16,7 +16,10 @@ import {
   ChevronUpIcon,
   CheckIcon,
 } from "@chakra-ui/icons";
+
 import useAutocomplete, { IAutocompleteHook } from "../hooks/useAutocomplete";
+import AutocompleteTag from "./AutocompleteTag";
+
 
 export interface IAutocomplete extends IAutocompleteHook {
   disabled?: boolean;
@@ -58,15 +61,22 @@ const Autocomplete: FC<IAutocomplete> = ({
       {Array.isArray(value) ?
         value.map((val) => {
           const option = hookProps.options?.find((item) => item.value === val);
-          return <Badge
+          return <AutocompleteTag
             key={val}
-            onClick={() => toggleOption(val)}
-            style={{ cursor: 'pointer' }}
-          >
-            {option?.label || val}
-          </Badge>
+            toggleOption={toggleOption}
+            value={val}
+            label={option?.label || val}
+          />
         })
-        : <Badge onClick={() => toggleOption(value)}>{value}</Badge>}
+        : <AutocompleteTag
+            toggleOption={toggleOption}
+            value={value}
+            label={
+              hookProps.options?.find((item) => item.value === value)?.label
+              || value
+            }
+          />
+      }
     </Stack>
     <InputGroup>
       <Input
