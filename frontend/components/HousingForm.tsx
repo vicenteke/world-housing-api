@@ -29,8 +29,8 @@ import Autocomplete from "./Autocomplete";
  * [OK] Implement click-away listener
  * [OK] Fix issues when using multiple autocompletes
  * [OK] Improve customizability by allowing passing components to all levels (e.g. MenuItem, Tag, Label, HelperText...)
- * Check code style/linter
- * Write comments
+ * [OK] Check code style/linter
+ * [OK] Write comments
  * Write README
  * Transform project into npm package
 */
@@ -76,12 +76,12 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
       <Input size='large' />
       <Input size='large' />
       <Autocomplete
+        size='xs'
         options={OPTIONS}
         renderMenuItem={renderMenuItemCustom}
         error='my error message is actually pretty cool.'
         label='Autocomplete 2'
         help='type in the text you want and select the options that match'
-        hideRightIcon
       />
     </CardBody>
   </Card>;
