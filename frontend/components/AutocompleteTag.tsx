@@ -34,8 +34,7 @@ const AutocompleteTag: FC<AutocompleteTagProps> = ({
     {/* Use default tag with close button if no children provided */}
     {!children && <>
       {typeof label === 'string' ? <TagLabel>{label}</TagLabel> : {label}}
-      <TagCloseButton onClick={(e) => {
-        e.stopPropagation();
+      <TagCloseButton onClick={() => {
         toggleOption(value);
         if (inputRef && inputRef.current)
           inputRef.current.focus();

@@ -124,7 +124,11 @@ const Autocomplete: FC<AutocompleteProps> = ({
     ((inputRef.current as unknown) as HTMLInputElement).focus();
   }
 
-  return <ClickAwayListener onClickAway={() => setOptionsExpanded(false)}>
+  return <ClickAwayListener onClickAway={() => {
+    setOptionsExpanded(false);
+    setSearchString('');
+    search('');
+  }}>
     <FormControl isDisabled={isDisabled} {...formControlProps}>
       {label &&
         (typeof label === 'string' ?
@@ -185,19 +189,13 @@ const Autocomplete: FC<AutocompleteProps> = ({
               );
             }
           }}
-          onClick={(e) => {
-            e.stopPropagation();
-            setOptionsExpanded(true);
-          }}
+          onClick={() => setOptionsExpanded(!optionsExpanded)}
           size={size}
           isDisabled={isDisabled}
           {...inputProps}
         />
         <InputRightElement
-          onClick={(e) => {
-            e.stopPropagation();
-            setOptionsExpanded(!optionsExpanded)
-          }}
+          onClick={() => setOptionsExpanded(!optionsExpanded)}
         >
           {optionsExpanded ?
             (closeMenuIcon || <ChevronUpIcon />)
@@ -234,12 +232,11 @@ const Autocomplete: FC<AutocompleteProps> = ({
               {searchResult.map((option) => (
                 <MenuItem
                   key={String(option.value)}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
                     toggleOption(option.value);
                     focusInput();
                   }}
-                  onBlur={(e) => focusInput()}
+                  onBlur={() => focusInput()}
                   isDisabled={isDisabled}
                   icon={
                     (props.isSingleSelect && option.value === value) ||

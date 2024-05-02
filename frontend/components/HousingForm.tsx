@@ -26,7 +26,7 @@ import Autocomplete from "./Autocomplete";
 /* TODOs
  * [OK] Fix focus issues
  * [OK] Implement click-away listener
- * Fix issues when using multiple autocompletes
+ * [OK] Fix issues when using multiple autocompletes
  * Improve customizability by allowing passing components to all levels (e.g. MenuItem, Tag, Label, HelperText...)
  * Check code style/linter
  * Write comments
