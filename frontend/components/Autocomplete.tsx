@@ -1,5 +1,6 @@
 'use client'
 import React, { FC, useRef } from "react";
+import ClickAwayListener from 'react-click-away-listener';
 import {
   FormControl,
   FormControlProps,
@@ -119,147 +120,145 @@ const Autocomplete: FC<AutocompleteProps> = ({
     search,
   } = useAutocomplete(hookProps);
 
-  // Create click-away listener to blur autocomplete
-  if (window)
-    window.addEventListener('click', () => setOptionsExpanded(false));
-
   function focusInput() {
     ((inputRef.current as unknown) as HTMLInputElement).focus();
   }
 
-  return <FormControl isDisabled={isDisabled} {...formControlProps}>
-    {label &&
-      (typeof label === 'string' ?
-      <FormLabel {...labelProps}>{label}</FormLabel>
-      : label)
-    }
-
-    <Stack
-      direction='row'
-      flexWrap='wrap'
-      width='100%'
-      visibility={
-        (props.isSingleSelect && ![undefined, null].includes(value))
-          || (Array.isArray(value) && value.length > 0)
-        ? 'inherit' : 'hidden'
+  return <ClickAwayListener onClickAway={() => setOptionsExpanded(false)}>
+    <FormControl isDisabled={isDisabled} {...formControlProps}>
+      {label &&
+        (typeof label === 'string' ?
+        <FormLabel {...labelProps}>{label}</FormLabel>
+        : label)
       }
-      mb={3}
-      {...tagStackProps}
-    >
-      {Array.isArray(value) ?
-        value.map((val) => {
-          const option = props.options?.find((item) => item.value === val);
-          return <AutocompleteTag
-            key={val}
+
+      <Stack
+        direction='row'
+        flexWrap='wrap'
+        width='100%'
+        visibility={
+          (props.isSingleSelect && ![undefined, null].includes(value))
+            || (Array.isArray(value) && value.length > 0)
+          ? 'inherit' : 'hidden'
+        }
+        mb={3}
+        {...tagStackProps}
+      >
+        {Array.isArray(value) ?
+          value.map((val) => {
+            const option = props.options?.find((item) => item.value === val);
+            return <AutocompleteTag
+              key={val}
+              toggleOption={isDisabled ? (val: any) => {return} : toggleOption}
+              value={val}
+              label={option?.label || val}
+              inputRef={inputRef}
+              {...tagProps}
+            />
+          })
+          : (value && <AutocompleteTag
             toggleOption={isDisabled ? (val: any) => {return} : toggleOption}
-            value={val}
-            label={option?.label || val}
+            value={value}
+            label={
+              props.options?.find((item) => item.value === value)?.label
+              || value
+            }
             inputRef={inputRef}
             {...tagProps}
-          />
-        })
-        : (value && <AutocompleteTag
-          toggleOption={isDisabled ? (val: any) => {return} : toggleOption}
-          value={value}
-          label={
-            props.options?.find((item) => item.value === value)?.label
-            || value
-          }
-          inputRef={inputRef}
-          {...tagProps}
-        />)
-      }
-    </Stack>
-    <InputGroup isDisabled={isDisabled} {...inputGroupProps}>
-      <Input
-        ref={inputRef}
-        value={searchString}
-        onChange={(e) => {
-          if (searchString !== e.target.value) {
-            setSearchString(e.target.value);
-            setOptionsExpanded(true);
-            search(e.target.value);
-  
-            // enforce focus
-            setTimeout(
-              () => focusInput(),
-              100
-            );
-          }
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-          setOptionsExpanded(true);
-        }}
-        size={size}
-        isDisabled={isDisabled}
-        {...inputProps}
-      />
-      <InputRightElement
-        onClick={(e) => {
-          e.stopPropagation();
-          setOptionsExpanded(!optionsExpanded)
-        }}
-      >
-        {optionsExpanded ?
-          (closeMenuIcon || <ChevronUpIcon />)
-          : (openMenuIcon || <ChevronDownIcon />)
+          />)
         }
-      </InputRightElement>
-    </InputGroup>
+      </Stack>
+      <InputGroup isDisabled={isDisabled} {...inputGroupProps}>
+        <Input
+          ref={inputRef}
+          value={searchString}
+          onChange={(e) => {
+            if (searchString !== e.target.value) {
+              setSearchString(e.target.value);
+              setOptionsExpanded(true);
+              search(e.target.value);
+    
+              // enforce focus
+              setTimeout(
+                () => focusInput(),
+                100
+              );
+            }
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setOptionsExpanded(true);
+          }}
+          size={size}
+          isDisabled={isDisabled}
+          {...inputProps}
+        />
+        <InputRightElement
+          onClick={(e) => {
+            e.stopPropagation();
+            setOptionsExpanded(!optionsExpanded)
+          }}
+        >
+          {optionsExpanded ?
+            (closeMenuIcon || <ChevronUpIcon />)
+            : (openMenuIcon || <ChevronDownIcon />)
+          }
+        </InputRightElement>
+      </InputGroup>
 
-    {!menuAnchorRef && <InputGroup ref={defaultMenuAnchorRef} />}
+      {!menuAnchorRef && <InputGroup ref={defaultMenuAnchorRef} zIndex='dropdown' position='relative' />}
 
-    {help &&
-      (typeof help === 'string' ?
-      <FormHelperText isDisabled={isDisabled} {...helpProps}>{help}</FormHelperText>
-      : help)
-    }
+      {help &&
+        (typeof help === 'string' ?
+        <FormHelperText isDisabled={isDisabled} {...helpProps}>{help}</FormHelperText>
+        : help)
+      }
 
-    {error &&
-      (typeof error === 'string' ?
-      <FormErrorMessage isDisabled={isDisabled} {...errorProps}>{error}</FormErrorMessage>
-      : error)
-    }
+      {error &&
+        (typeof error === 'string' ?
+        <FormErrorMessage isDisabled={isDisabled} {...errorProps}>{error}</FormErrorMessage>
+        : error)
+      }
 
-    <Menu isOpen={optionsExpanded}
-      closeOnSelect={props.isSingleSelect}
-      initialFocusRef={inputRef}
-      {...menuProps}
-    >
-      <Portal containerRef={menuAnchorRef || defaultMenuAnchorRef}>
-          <MenuList
-            mt={menuGutter === undefined ? 2 : menuGutter}
-            isDisabled={isDisabled}
-            {...menuListProps}
-          >
-            {searchResult.map((option) => (
-              <MenuItem
-                key={String(option.value)}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleOption(option.value);
-                  focusInput();
-                }}
-                onBlur={(e) => focusInput()}
-                isDisabled={isDisabled}
-                icon={
-                  (props.isSingleSelect && option.value === value) ||
-                  (
-                    !props.isSingleSelect &&
-                    value.find((val: any) => val === option.value)
-                  )
-                  ? (listIcon || <CheckIcon color='green' />) : undefined
-                }
-                {...menuItemProps}
-              >
-                {option.label}
-              </MenuItem>
-            ))}
-          </MenuList>
-      </Portal>
-    </Menu>
-  </FormControl>;
+      <Menu isOpen={optionsExpanded}
+        closeOnSelect={props.isSingleSelect}
+        initialFocusRef={inputRef}
+        {...menuProps}
+      >
+        <Portal containerRef={menuAnchorRef || defaultMenuAnchorRef}>
+            <MenuList
+              mt={menuGutter === undefined ? 2 : menuGutter}
+              isDisabled={isDisabled}
+              {...menuListProps}
+            >
+              {searchResult.map((option) => (
+                <MenuItem
+                  key={String(option.value)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleOption(option.value);
+                    focusInput();
+                  }}
+                  onBlur={(e) => focusInput()}
+                  isDisabled={isDisabled}
+                  icon={
+                    (props.isSingleSelect && option.value === value) ||
+                    (
+                      !props.isSingleSelect &&
+                      value.find((val: any) => val === option.value)
+                    )
+                    ? (listIcon || <CheckIcon color='green' />) : undefined
+                  }
+                  {...menuItemProps}
+                >
+                  {option.label}
+                </MenuItem>
+              ))}
+            </MenuList>
+        </Portal>
+      </Menu>
+    </FormControl>
+  </ClickAwayListener>;
 }
 
 export default Autocomplete;
