@@ -58,26 +58,26 @@ export interface AutocompleteOnlyProps extends AutocompleteHookProps {
    */
   closeMenuIcon?: React.ReactElement;
   error?: string | React.ReactElement;
-  errorProps?: FormErrorMessageProps;
+  errorProps?: Omit<FormErrorMessageProps, 'children'>;
   help?: string | React.ReactElement;
-  helpProps?: FormHelperTextProps;
+  helpProps?: Omit<FormHelperTextProps, 'children'>;
   hideRightIcon?: boolean;
-  inputGroupProps?: InputGroupProps;
+  inputGroupProps?: Omit<InputGroupProps, 'children'>;
   inputProps?: InputProps;
   isDisabled?: boolean;
   label?: string | React.ReactElement;
-  labelProps?: FormLabelProps;
+  labelProps?: Omit<FormLabelProps, 'children'>;
   menuAnchorRef?: React.MutableRefObject<any>;
   menuGutter?: number;
-  menuItemProps?: MenuItemProps;
-  menuListProps?: MenuListProps;
-  menuProps?: MenuProps;
+  menuItemProps?: Omit<MenuItemProps, 'children'>;
+  menuListProps?: Omit<MenuListProps, 'children'>;
+  menuProps?: Omit<MenuProps, 'children'>;
   menuSelectedIcon?: React.ReactElement;
   openMenuIcon?: React.ReactElement;
   renderMenuItem?: (props: AutocompleteMenuItemProps) => React.ReactElement;
   size?: 'xs' | 'sm' | 'md' | 'lg';
-  tagProps?: TagProps;
-  tagStackProps?: StackProps;
+  tagProps?: Omit<TagProps, 'children'>;
+  tagStackProps?: Omit<StackProps, 'children'>;
 }
 
 /* autocomplete is wrapped in a Chakra's FormControl, so it accepts all
