@@ -88,6 +88,18 @@ export type AutocompleteProps = AutocompleteOnlyProps & FormControlProps;
 /* Autocomplete component based on Chakra UI.
  *
  * Params (apart from all FormControlProps):
+ * - options: array of the available options, each containing a label
+ *      (displayed for the user) and a value (identifies the option);
+ * - findOptions?: method that takes the search input and returns the options
+ *      to be displayed. By default it will look for labels or values that
+ *      include the search input;
+ * - isCaseInsensitive?: boolean that makes the default search
+ *      case-insensitive. Note that, if you specify the findOptions property,
+ *      you have to handle that on your own, as it affects only the default
+ *      search;
+ * - isSingleSelect?: boolean that tells the autocomplete to select only a
+ *      single option at most. Therefore, the "value" becomes a single value
+ *      and not an array of values (as default);
  * - closeMenuIcon?: specifies a custom ReactElement to be shown on the right
  *      of the text input when the menu list is open. Defaults to a Chakra's
  *      ChevronUpIcon;
@@ -104,7 +116,7 @@ export type AutocompleteProps = AutocompleteOnlyProps & FormControlProps;
  *      Chakra's InputGroup;
  * - inputProps?: props to customize the text input. It's in fact a Chakra's
  *      Input;
- * - isDisabled?: dwhether the input is disabled or not;
+ * - isDisabled?: whether the input is disabled or not;
  * - label?: form group label. It can be either a string or a ReactElement;
  * - labelProps?: props to customize the input group label. It's in fact a
  *      Chakra's FormLabel;

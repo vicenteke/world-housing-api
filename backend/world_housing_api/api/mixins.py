@@ -25,7 +25,7 @@ class HousingDataMixin:
             final_year: int = None,
             final_month: int = None,
             states: list = []):
-        """This method must be overriden for each country.
+        """This method must be overridden for each country.
         It should retrieve new housing data and return it as in the example:
 
         [

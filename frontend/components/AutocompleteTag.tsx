@@ -19,7 +19,7 @@ export interface AutocompleteTagProps extends TagProps {
 /* Default autocomplete tag component, used to display selected options.
  *
  * Params:
- * - label: text to be shown in the tag. Note that it is overriden by the
+ * - label: text to be shown in the tag. Note that it is overridden by the
  *      children if any is passed to the component;
  * - onClose: method to be executed when clicking on the close button on the
  *      right. It only applies when no children is passed to the component;

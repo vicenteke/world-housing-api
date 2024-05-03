@@ -187,20 +187,20 @@ const useAutocomplete = ({
   }
 
   return {
-    value,
-    setValue,
-    searchString,
-    setSearchString,
     clearSearch,
     optionsExpanded,
-    setOptionsExpanded,
     reset,
     search,
-    selectOption,
-    unselectOption,
-    toggleOption,
     searchResult,
+    searchString,
+    selectOption,
+    setOptionsExpanded,
     setSearchResult,
+    setSearchString,
+    setValue,
+    toggleOption,
+    unselectOption,
+    value
   }
 };
 
