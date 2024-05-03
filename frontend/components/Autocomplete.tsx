@@ -88,6 +88,9 @@ export type AutocompleteProps = AutocompleteOnlyProps & FormControlProps;
 /* Autocomplete component based on Chakra UI.
  *
  * Params (apart from all FormControlProps):
+ * - value: state holding array of the selected options' values or the
+ *      selected option's value (if isSingleSelect);
+ * - setValue: "value" state setter;
  * - options: array of the available options, each containing a label
  *      (displayed for the user) and a value (identifies the option);
  * - findOptions?: method that takes the search input and returns the options
@@ -174,7 +177,11 @@ const Autocomplete: FC<AutocompleteProps> = ({
   const inputRef = useRef(null);
 
   // split hook props
-  let hookProps: AutocompleteHookProps = {options: props.options};
+  let hookProps: AutocompleteHookProps = {
+    value: null,
+    setValue: () => {},
+    options: props.options
+  };
   const hookPropsEntries = Object.entries(props).filter(
     (entry) => AutocompleteHookPropsList.includes(entry[0])
   );
@@ -243,6 +250,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
               onClose={isDisabled ? () => {return} : () => unselectOption(val)}
               label={option?.label || val}
               inputRef={inputRef}
+              isDisabled={isDisabled}
               {...tagProps}
             />
           })
@@ -253,11 +261,12 @@ const Autocomplete: FC<AutocompleteProps> = ({
               || value
             }
             inputRef={inputRef}
+            isDisabled={isDisabled}
             {...tagProps}
           />)
         }
       </Stack>
-      <InputGroup isDisabled={isDisabled} size={size} {...inputGroupProps}>
+      <InputGroup size={size} {...inputGroupProps}>
         <Input
           ref={inputRef}
           value={searchString}
@@ -302,7 +311,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
 
       {help &&
         (typeof help === 'string' ?
-          <FormHelperText isDisabled={isDisabled} {...helpProps}>
+          <FormHelperText {...helpProps}>
             {help}
           </FormHelperText>
           : help
@@ -311,7 +320,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
 
       {error &&
         (typeof error === 'string' ?
-          <FormErrorMessage isDisabled={isDisabled} {...errorProps}>
+          <FormErrorMessage {...errorProps}>
             {error}
           </FormErrorMessage>
           : error
@@ -326,7 +335,6 @@ const Autocomplete: FC<AutocompleteProps> = ({
         <Portal containerRef={menuAnchorRef || defaultMenuAnchorRef}>
             <MenuList
               mt={menuGutter === undefined ? 2 : menuGutter}
-              isDisabled={isDisabled}
               {...menuListProps}
             >
               {searchResult.map((option, index) => {

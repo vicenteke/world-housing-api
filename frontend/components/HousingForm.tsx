@@ -61,9 +61,14 @@ const OPTIONS = [
 
 
 const HousingForm: FC<CardProps> = (props: CardProps) => {
+  const [value, setValue] = useState<number[]>([]);
+
   return <Card {...props}>
     <CardBody>
       <Autocomplete
+        isDisabled
+        value={value}
+        setValue={setValue}
         options={OPTIONS}
         error='my error message is actually pretty cool.'
         label='Autocomplete'
@@ -71,11 +76,9 @@ const HousingForm: FC<CardProps> = (props: CardProps) => {
         isRequired
         mb={4}
       />
-      <Input size='large' />
-      <Input size='large' />
-      <Input size='large' />
-      <Input size='large' />
       <Autocomplete
+        value={value}
+        setValue={setValue}
         size='xs'
         options={OPTIONS}
         renderMenuItem={renderMenuItemCustom}

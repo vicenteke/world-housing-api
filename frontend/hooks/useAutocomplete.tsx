@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { ReactEventHandler, useState } from "react";
 
 
 interface AutocompleteOptionProps {
@@ -10,6 +10,8 @@ interface AutocompleteOptionProps {
 
 interface AutocompleteHookProps {
   // hook parameters. See description below for more information.
+  value: any;
+  setValue: React.Dispatch<any>;
   options: AutocompleteOptionProps[];
   findOptions?: (search: string) => AutocompleteOptionProps[];
   isCaseInsensitive?: boolean;
@@ -19,6 +21,8 @@ interface AutocompleteHookProps {
 // we rather keep a list here in order to keep related data in the same file.
 // used to differentiate hook parameters from other props.
 export const AutocompleteHookPropsList = [
+  'value',
+  'setValue',
   'options',
   'isSingleSelect',
   'findOptions',
@@ -28,6 +32,9 @@ export const AutocompleteHookPropsList = [
 /* A hook implementing the autocomplete logic.
  *
  * Params:
+ * - value: state holding array of the selected options' values or the
+ *      selected option's value (if isSingleSelect);
+ * - setValue: "value" state setter;
  * - options: array of the available options, each containing a label
  *      (displayed for the user) and a value (identifies the option);
  * - findOptions?: method that takes the search input and returns the options
@@ -42,8 +49,6 @@ export const AutocompleteHookPropsList = [
  *      and not an array of values (as default);
  *
  * Returns:
- * - value (setter: setValue): array of the selected options' values or the
- *      selected option's value (if isSingleSelect);
  * - searchString (setter: setSearchString): string in the text input;
  * - clearSearch: sets search string to '' and resets the search result;
  * - optionsExpanded (setter: setOptionsExpanded): controls menu's
@@ -62,12 +67,13 @@ export const AutocompleteHookPropsList = [
  *      be shown in the menu. It is updated after each search();
  */
 const useAutocomplete = ({
+  value,
+  setValue,
   options,
   isSingleSelect,
   findOptions,
   isCaseInsensitive,
 }: AutocompleteHookProps) => {
-  const [value, setValue] = useState<any>(isSingleSelect ? null : []);
   const [searchString, setSearchString] = useState<string>('');
   const [searchResult, setSearchResult] = useState<AutocompleteOptionProps[]>(options);
   const [optionsExpanded, setOptionsExpanded] = useState<boolean>(false);
