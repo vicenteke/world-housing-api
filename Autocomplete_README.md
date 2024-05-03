@@ -9,7 +9,106 @@ An autocomplete component based on Chakra UI elements.
 [insert example image(s)]
 
 ## Usage
-[insert examples]
+### Basic Usage
+```typescript
+'use client'
+import { useState } from 'react';
+import useAutocomplete from 'chakra-ui-autocomplete';
+
+const OPTIONS = [
+  {label: 'First Option', value: 1},
+  {label: 'Second Option', value: 2},
+  {label: 'Third Option', value: 3},
+  {label: 'Fourth Option', value: 4},
+  {label: 'Fifth Option', value: 5},
+]
+
+function MyComponent() {
+  // it always uses a controlled state. Here, you can access them with "value".
+  const [value, setValue] = useState<number[]>([]);
+
+  return <Autocomplete options={OPTIONS} value={value} setValue={setValue} />
+}
+```
+
+TODO [include image]
+
+### Form Control
+In fact, the Autocomplete component is a Chakra's FormControl. That means we can add a label, helper text, invalid and disabled state, and any customization available for FormControl.
+
+```typescript
+<Autocomplete
+  options={OPTIONS}
+  value={value}
+  setValue={setValue}
+
+  isDisabled
+  isRequired
+  label='Disabled Autocomplete'
+  help='This autocomplete is disabled'
+/>
+```
+
+TODO [include image]
+
+```typescript
+<Autocomplete
+  options={OPTIONS}
+  value={value}
+  setValue={setValue}
+
+  isInvalid
+  label='Invalid Autocomplete'
+  help='This autocomplete is invalid'
+  error='sorry about that ;('
+/>
+```
+
+TODO [include image]
+
+### Customization
+The Autocomplete component is highly customizable. I mean, highly. You can roughly customize everything using the props, you can check all the options in the `Components > Autocomplete > Props` section.
+
+Here is an example:
+```typescript
+const renderMenuItemCustom = (props: any) => {
+  // you can provide a custom menu item.
+  // Here we just use the option value as the content.
+  const {itemKey, onClickHandler, onBlurHandler, option, ...itemProps} = props;
+  return <MenuItem key={itemKey} onClick={onClickHandler} onBlur={onBlurHandler} {...itemProps}>
+    {option.value}
+  </MenuItem>
+}
+
+...
+
+<Autocomplete
+  options={OPTIONS}
+  value={value}
+  setValue={setValue}
+
+  size='xs'
+  renderMenuItem={renderMenuItemCustom}
+  tagProps={{ colorScheme: 'green' }}
+  menuGutter={0}
+  menuSelectedIcon={<ChevronRightIcon color='purple' />}
+  closeMenuIcon={<ChevronRightIcon color='red' />}
+  label='Customized Autocomplete'
+/>
+```
+
+TODO [include image]
+
+NOTE: this lib is not so complex, which means that you can easily adapt it for your needs if you ever need to.
+
+### Focus Behaviour
+It is important to mention that it:
+
+1) Has a click-away listener to blur the input and collapse the menu when the user clicks outside the component;
+2) Will focus on the input when you perform some actions, like unselecting an option by closing a tag or leaving your mouse from the menu list.
+
+Also, each component is independent, in a sens that focusing from one autocomplete to another will end up collapsing the menu from the first one and opening the menu for the second.
+
 
 ## Components
 ### Autocomplete
@@ -59,7 +158,7 @@ Default autocomplete tag component, used to display selected options.
 | isDisabled | boolean                   | false    | used to style component and disable onClick                                                                                                                   | false     |
 
 ## useAutocomplete Hook
-A hook implementing the autocomplete logic.
+A hook implementing the autocomplete logic. Usually you won't need to use it.
 
 ### Example
 ```typescript
